@@ -6,7 +6,7 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
     />
-    <title>Daily Groove</title>
+    <title>Smart Study Dashboard</title>
     <script src="https://cdn.jsdelivr.net/npm/dayjs@1.11.7/dayjs.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/dayjs@1.11.7/plugin/isBetween.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/dayjs@1.11.7/plugin/utc.min.js"></script>
@@ -28,20 +28,80 @@
       <source src="alert.wav" type="audio/wav" />
     </audio>
     <button
-      onclick="enableAudio()"
-      id="enable-sound"
+      onclick="enableAppFeatures()"
+      id="enable-features"
       class="btn btn-error"
       type="button"
     >
-      Enable Sound
+      Sound & Speech Recognition
     </button>
     <script>
-      alert("Please enable sound to receive notifications.");
+      alert("Please enable sound and speech recognition to use this app.");
+
+      function enableAppFeatures() {
+        enableAudio();
+        enableSpeechRecognition();
+        document.getElementById("enable-features").remove();
+      }
 
       function enableAudio() {
         var audio = new Audio();
         audio.play();
-        document.getElementById("enable-sound").remove();
+      }
+
+      function enableSpeechRecognition() {
+        if (
+          !("webkitSpeechRecognition" in window) &&
+          !("SpeechRecognition" in window)
+        ) {
+          alert(
+            "Your browser does not support speech recognition. Please use a modern browser."
+          );
+        } else {
+          const SpeechRecognition =
+            window.SpeechRecognition || window.webkitSpeechRecognition;
+          const recognition = new SpeechRecognition();
+
+          recognition.continuous = true; // Enable continuous recognition
+          recognition.interimResults = true; // Show interim results
+          recognition.start();
+
+          recognition.onresult = (event) => {
+            let interimTranscript = "";
+            let finalTranscript = "";
+
+            for (let i = 0; i < event.results.length; i++) {
+              const transcript = event.results[i][0].transcript;
+              if (event.results[i].isFinal) {
+                finalTranscript += transcript + " ";
+                console.log(transcript);
+                const myRecognitionEnd = new CustomEvent("myRecognitionEnd", {
+                  detail: transcript,
+                });
+                document.dispatchEvent(myRecognitionEnd);
+              } else {
+                interimTranscript += transcript;
+              }
+            }
+
+            console.log("Final:", finalTranscript);
+            console.log("Interim:", interimTranscript);
+          };
+
+          recognition.onerror = (event) => {
+            console.error("Speech recognition error:", event.error);
+            setTimeout(() => {
+              recognition.start();
+            }, 1000);
+          };
+
+          recognition.onend = () => {
+            console.log("Speech recognition service disconnected");
+            setTimeout(() => {
+              recognition.start();
+            }, 1000);
+          };
+        }
       }
     </script>
     <div id="app"></div>

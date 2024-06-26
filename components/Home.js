@@ -3,7 +3,9 @@ import { html } from "../libs/preact.js";
 export default function Home({ activeWidgets }) {
   return html`
     <div className="drawer-content">
-      <div className="grid gap-4 grid-cols-1 md:grid-cols-2 items-stretch">
+      <div
+        className="grid gap-4 grid-cols-1 md:grid-cols-2 items-stretch mb-64"
+      >
         ${activeWidgets.map(
           ({ component: Widget, name }) =>
             html`
