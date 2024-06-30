@@ -25,28 +25,32 @@ export default function StudyReviewItem({ item, updateData, subject }) {
       };
     });
 
+    const temp = [];
     const processedData = initialProcessedData.map((data, i) => {
       if (i === 0) {
-        return {
+        const item = {
           ...data,
           expectedDate: data.date,
         };
+        temp.push(item);
+        return item;
       }
 
-      const dataInitial = initialProcessedData.find((d) => d.isFirstDayItem);
-      const dataBefore = initialProcessedData[i - 1];
+      const dataBefore = temp[temp.length - 1];
       const dayGap = data.day - dataBefore.day;
       const expectedDate = dataBefore.done
         ? formatedDate(dataBefore.date, dayGap)
-        : formatedDate(dataInitial.date, data.day);
+        : formatedDate(dataBefore.expectedDate, dayGap);
 
-      return {
+      const item = {
         ...data,
         expectedDate: expectedDate,
       };
+      temp.push(item);
+      return item;
     });
 
-    /**å
+    /**
      * Start of setting up calendar events
      */
     const calendarStudyEvents = processedData
