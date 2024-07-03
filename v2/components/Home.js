@@ -1,6 +1,7 @@
 import { html, useState } from "../libs/preact.js";
 import Calendar from "./Widgets/Calendar.js";
 import Clock from "./Widgets/Clock.js";
+import StudyPlanner from "./Widgets/StudyPlanner.js";
 
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -14,6 +15,12 @@ export default function Home() {
     {
       Comp: Calendar,
       title: "Calendar",
+      hidden: false,
+      pinned: false,
+    },
+    {
+      Comp: StudyPlanner,
+      title: "학습 계획",
       hidden: false,
       pinned: false,
     },

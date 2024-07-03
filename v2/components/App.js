@@ -27,13 +27,32 @@ export default function App() {
       done: false,
     },
   ]);
+  const studyGapsBetween = [1, 2, 3, 4, 5];
   const [rawStudyData, setRawStudyData] = useState([
     {
       subject: "The Art of War",
-      gapsBetween: [1, 2, 3, 4, 5],
+      chapter: "Chapter 1",
       studyRoutines: [
         {
-          what: "Chapter 1",
+          what: "Do something",
+          how: "Read, take notes, summarize",
+          done: false,
+          doneDate: null,
+        },
+        {
+          what: "Do something2",
+          how: "Read, take notes, summarize",
+          done: false,
+          doneDate: null,
+        },
+      ],
+    },
+    {
+      subject: "The Art of War",
+      chapter: "Chapter 2",
+      studyRoutines: [
+        {
+          what: "Do something",
           how: "Read, take notes, summarize",
           done: false,
           doneDate: null,
@@ -132,36 +151,39 @@ export default function App() {
   const studyData = (() => {
     const data = {};
 
-    rawStudyData.forEach((study) => {
-      const { subject, studyRoutines, gapsBetween } = study;
-      const tempDoneSave = [];
-      studyRoutines.forEach((routine, index) => {
-        const { what, how, done, doneDate } = routine;
+    rawStudyData.forEach((chapterData) => {
+      const { subject, studyRoutines } = chapterData;
+
+      const tempDates = [];
+      const studyRoutinesWithExpected = studyRoutines.map((routine, index) => {
+        const { done, doneDate } = routine;
         let expectedDoneDate = null;
 
         if (done) {
-          tempDoneSave.push(doneDate);
+          tempDates.push(doneDate);
         } else {
-          const gap = gapsBetween[index];
-          if (tempDoneSave[index - 1]) {
-            expectedDoneDate = dayjs(tempDoneSave[index - 1])
+          const gap = studyGapsBetween[index];
+          if (tempDates[index - 1]) {
+            expectedDoneDate = dayjs(tempDates[index - 1])
               .add(gap, "day")
               .format("YYYY-MM-DD");
           }
-          tempDoneSave.push(expectedDoneDate);
+          tempDates.push(expectedDoneDate);
         }
 
-        if (!data[subject]) {
-          data[subject] = [];
-        }
-
-        data[subject].push({
-          what,
-          how,
-          done,
-          doneDate,
+        return {
+          ...routine,
           expectedDoneDate,
-        });
+        };
+      });
+
+      if (!data[subject]) {
+        data[subject] = [];
+      }
+
+      data[subject].push({
+        ...chapterData,
+        studyRoutines: studyRoutinesWithExpected,
       });
     });
 
@@ -219,22 +241,28 @@ export default function App() {
     });
 
     Object.keys(studyData).forEach((subject) => {
-      studyData[subject].forEach((study) => {
-        const { what, how, done, doneDate, expectedDoneDate } = study;
-        if (!(done ? doneDate : expectedDoneDate)) {
-          return;
-        }
-        data.study.push({
-          title: `${subject} ${what}`,
-          description: how,
-          start: dayjs(done ? doneDate : expectedDoneDate)
-            .startOf("day")
-            .toDate(),
-          end: dayjs(done ? doneDate : expectedDoneDate)
-            .endOf("day")
-            .toDate(),
-          allDay: true,
-          backgroundColor: done ? "green" : "silver",
+      studyData[subject].forEach((chapterData) => {
+        const { studyRoutines: chapterStudyRoutines } = chapterData;
+        chapterStudyRoutines.forEach((chapterRoutine) => {
+          const { what, how, done, doneDate, expectedDoneDate } =
+            chapterRoutine;
+
+          if (!(done ? doneDate : expectedDoneDate)) {
+            return;
+          }
+
+          data.study.push({
+            title: `${subject} (${what})`,
+            description: how,
+            start: dayjs(done ? doneDate : expectedDoneDate)
+              .startOf("day")
+              .toDate(),
+            end: dayjs(done ? doneDate : expectedDoneDate)
+              .endOf("day")
+              .toDate(),
+            allDay: true,
+            backgroundColor: done ? "green" : "silver",
+          });
         });
       });
     });
