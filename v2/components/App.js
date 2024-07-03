@@ -36,8 +36,8 @@ export default function App() {
         {
           what: "Do something",
           how: "Read, take notes, summarize",
-          done: false,
-          doneDate: null,
+          done: true,
+          doneDate: "2024-07-01",
         },
         {
           what: "Do something2",
@@ -366,7 +366,20 @@ export default function App() {
         routineData,
         allDayTodayData,
       }}
-      children=${html`<${Home} />`}
+      children=${html`
+        <${Home} />
+        <dialog id="my_modal_1" className="modal">
+          <div className="modal-box">
+            <h3 className="font-bold text-lg" id="modal-title"></h3>
+            <p className="py-4" id="modal-content"></p>
+            <div className="modal-action">
+              <form method="dialog">
+                <button className="btn">Close</button>
+              </form>
+            </div>
+          </div>
+        </dialog>
+      `}
     />
   `;
 }

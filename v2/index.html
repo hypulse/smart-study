@@ -26,5 +26,17 @@
   <body>
     <div id="app"></div>
     <script src="./index.js" type="module"></script>
+    <script>
+      window.showModal = (text, title = "Alert") => {
+        const modal = document.getElementById("my_modal_1");
+        if (text) {
+          modal.querySelector("#modal-content").innerText = text;
+        }
+        if (title) {
+          modal.querySelector("#modal-title").innerText = title;
+        }
+        modal.showModal();
+      };
+    </script>
   </body>
 </html>

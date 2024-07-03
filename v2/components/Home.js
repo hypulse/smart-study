@@ -54,10 +54,10 @@ export default function Home() {
       >
         Home
       </a>
-      <div className="flex flex-col flex-wrap gap-4">
+      <div className="flex flex-col flex-wrap max-h-screen">
         ${activeWidgets.map(
           ({ Comp, title }) => html`
-            <div className="w-1/2" key=${title}>
+            <div className="w-1/2 p-2" key=${title}>
               <${Comp} />
             </div>
           `

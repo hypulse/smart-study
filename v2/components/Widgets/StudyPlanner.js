@@ -68,7 +68,7 @@ function ChapterRoutine({ chapterRoutine }) {
   const { what, how, done, doneDate, expectedDoneDate } = chapterRoutine;
 
   if (done) {
-    html`
+    return html`
       <div>
         <div className="form-control">
           <label className="cursor-pointer label">
@@ -89,6 +89,10 @@ function ChapterRoutine({ chapterRoutine }) {
     `;
   }
 
+  const todayDate = dayjs().format("YYYY-MM-DD");
+  const isToday = todayDate === expectedDoneDate;
+  const isOverdue = todayDate > expectedDoneDate;
+
   return html`
     <div>
       <div className="form-control">
@@ -98,7 +102,11 @@ function ChapterRoutine({ chapterRoutine }) {
         </label>
       </div>
       <p>${how}</p>
-      <p>학습 예정일: ${expectedDoneDate}</p>
+      <p>
+        ${isToday && html`<span className="badge badge-info">Today</span>`}
+        ${isOverdue && html`<span className="badge badge-warning">Late</span>`}
+        ${" "}학습 예정일: ${expectedDoneDate}
+      </p>
     </div>
   `;
 }

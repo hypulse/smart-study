@@ -12,12 +12,17 @@ export default function Calendar() {
 
     const calendar = new FullCalendar.Calendar(ref.current, {
       initialView: "dayGridMonth",
-      events: calendarData.calendar,
+      events: [...calendarData.calendar, ...calendarData.study],
       editable: false,
       headerToolbar: {
         center: "dayGridMonth,timeGridWeek,timeGridDay",
       },
-      eventClick: function (data) {},
+      eventClick: function (data) {
+        window.showModal(
+          data.event.extendedProps.description,
+          data.event.title
+        );
+      },
     });
 
     calendar.render();
