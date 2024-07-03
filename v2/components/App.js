@@ -8,7 +8,10 @@ import Home from "./Home.js";
 export default function App() {
   const { authenticated } = usePb();
   const [screenSaver, setScreenSaver] = useState(false);
-  const [dataReady, setDataReady] = useState(true);
+  const [dataReady, setDataReady] = useState(false);
+  const [rawConfigData, setRawConfigData] = useState({
+    studyGapsBetween: [1, 2, 3, 4, 5],
+  });
   const [rawRoutineData, setRawRoutineData] = useState([
     {
       title: "Morning Routine",
@@ -27,7 +30,6 @@ export default function App() {
       done: false,
     },
   ]);
-  const studyGapsBetween = [1, 2, 3, 4, 5];
   const [rawStudyData, setRawStudyData] = useState([
     {
       subject: "The Art of War",
@@ -59,6 +61,18 @@ export default function App() {
         },
       ],
     },
+    {
+      subject: "The Art of War 2",
+      chapter: "Chapter 1",
+      studyRoutines: [
+        {
+          what: "Do something",
+          how: "Read, take notes, summarize",
+          done: false,
+          doneDate: null,
+        },
+      ],
+    },
   ]);
   const [rawCalendarData, setRawCalendarData] = useState([
     {
@@ -71,7 +85,13 @@ export default function App() {
     },
   ]);
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    async function init() {
+      setDataReady(true);
+    }
+
+    init();
+  }, []);
 
   if (!PB_URL || !CONFIG_RECORD_ID) {
     function getLocal() {
@@ -162,7 +182,7 @@ export default function App() {
         if (done) {
           tempDates.push(doneDate);
         } else {
-          const gap = studyGapsBetween[index];
+          const gap = rawConfigData.studyGapsBetween[index];
           if (tempDates[index - 1]) {
             expectedDoneDate = dayjs(tempDates[index - 1])
               .add(gap, "day")

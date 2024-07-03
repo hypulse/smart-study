@@ -24,6 +24,7 @@ export default function usePbData(collectionId, recordId) {
       resetData();
     }
   };
+
   const resetData = () => {
     setData(defaultData);
   };

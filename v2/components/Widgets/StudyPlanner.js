@@ -4,7 +4,7 @@ import { html, useState } from "../../libs/preact.js";
 export default function StudyPlanner() {
   const { studyData } = useAppContext();
   const subjects = Object.keys(studyData);
-  const [selectedSubject, setSelectedSubject] = useState(null);
+  const [selectedSubject, setSelectedSubject] = useState(subjects[0]);
   const subjectChapters = studyData[selectedSubject];
 
   return html`
@@ -13,7 +13,9 @@ export default function StudyPlanner() {
         ${subjects.map(
           (subject) => html`
             <button
-              className="btn join-item"
+              className="btn join-item ${selectedSubject === subject
+                ? "btn-primary"
+                : ""}"
               onClick=${() => setSelectedSubject(subject)}
             >
               ${subject}
@@ -45,11 +47,20 @@ function ChapterBox({ chapterData }) {
   const doneCount = chapterStudyRoutines.filter(
     (routine) => routine.done
   ).length;
+  const todayDate = dayjs().format("YYYY-MM-DD");
+  const isToday = chapterStudyRoutines.some(
+    (routine) => routine.expectedDoneDate === todayDate
+  );
+  const isOverdue = chapterStudyRoutines.some(
+    (routine) => routine.expectedDoneDate < todayDate
+  );
 
   return html`
     <details className="collapse bg-base-200">
       <summary className="collapse-title text-xl font-medium">
-        ${chapter} (${doneCount}/${chapterStudyRoutines.length})
+        ${isToday && html`<span className="badge badge-info">Today</span>`}
+        ${isOverdue && html`<span className="badge badge-warning">Late</span>`}
+        ${" "}${chapter} (${doneCount}/${chapterStudyRoutines.length})
       </summary>
       <div className="collapse-content">
         <div className="grid gap-2">
