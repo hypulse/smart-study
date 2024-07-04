@@ -64,10 +64,8 @@ function ChapterBox({ chapterData }) {
       </summary>
       <div className="collapse-content">
         <div className="grid gap-2">
-          ${chapterStudyRoutines.map((chapterRoutine) => {
-            return html`
-              <${ChapterRoutine} chapterRoutine=${chapterRoutine} />
-            `;
+          ${chapterStudyRoutines.map((studyRoutine) => {
+            return html` <${ChapterRoutine} studyRoutine=${studyRoutine} /> `;
           })}
         </div>
       </div>
@@ -75,8 +73,8 @@ function ChapterBox({ chapterData }) {
   `;
 }
 
-function ChapterRoutine({ chapterRoutine }) {
-  const { what, how, done, doneDate, expectedDoneDate } = chapterRoutine;
+function ChapterRoutine({ studyRoutine }) {
+  const { what, how, done, doneDate, expectedDoneDate } = studyRoutine;
 
   if (done) {
     return html`

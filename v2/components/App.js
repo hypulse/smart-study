@@ -36,10 +36,10 @@ export default function App() {
    * @type {{data: RawConfig, ready: boolean}}
    */
   const { data: rawConfigData, ready: rawConfigReady } = usePbData(
-    "config",
+    "configs",
     CONFIG_RECORD_ID
   );
-  const studyGapsBetween = rawConfigData.studyGapsBetween || [];
+  const whatHowTemplate = rawConfigData.whatHowTemplate || [];
 
   useEffect(() => {
     syncAuth();
@@ -312,6 +312,7 @@ export default function App() {
         screenSaver,
         setScreenSaver,
         newStudyData,
+        whatHowTemplate,
       }}
       children=${html`
         <${Home} />

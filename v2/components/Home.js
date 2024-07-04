@@ -1,26 +1,26 @@
 import { html, useState } from "../libs/preact.js";
-import Calendar from "./Widgets/Calendar.js";
+import AddStudyPlan from "./Widgets/AddStudyPlan.js";
 import Clock from "./Widgets/Clock.js";
 import StudyPlanner from "./Widgets/StudyPlanner.js";
 
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
   const widgets = [
-    // {
-    //   Comp: Clock,
-    //   title: "Clock",
-    //   hidden: false,
-    //   pinned: false,
-    // },
-    // {
-    //   Comp: Calendar,
-    //   title: "Calendar",
-    //   hidden: false,
-    //   pinned: false,
-    // },
+    {
+      Comp: Clock,
+      title: "Clock",
+      hidden: false,
+      pinned: false,
+    },
     {
       Comp: StudyPlanner,
       title: "학습 계획",
+      hidden: false,
+      pinned: false,
+    },
+    {
+      Comp: AddStudyPlan,
+      title: "학습 계획 추가",
       hidden: false,
       pinned: false,
     },

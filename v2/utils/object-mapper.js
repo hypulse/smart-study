@@ -3,24 +3,28 @@
  * rawStudyData를 가공한 데이터
  * subject를 key로 하고 chapterStudyRoutines의 각 항목에 expectedDoneDate를 추가한 데이터
  */
-function getNewStudyData(rawStudyData) {
+function getNewStudyData(
+  /**
+   * @type {RawStudy[]}
+   */
+  rawStudyData
+) {
   const newStudyData = {};
 
   rawStudyData.forEach((chapterData) => {
     const { subject, chapterStudyRoutines } = chapterData;
     const tempDates = [];
     const studyRoutinesWithExpected = chapterStudyRoutines.map(
-      (routine, index) => {
-        const { done, doneDate } = routine;
+      (studyRoutine, index) => {
+        const { done, doneDate, dayAfter } = studyRoutine;
         let expectedDoneDate = null;
 
         if (done) {
           tempDates.push(doneDate);
         } else {
-          const gap = studyGapsBetween[index];
           if (tempDates[index - 1]) {
             expectedDoneDate = dayjs(tempDates[index - 1])
-              .add(gap, "day")
+              .add(dayAfter, "day")
               .format("YYYY-MM-DD");
           }
           tempDates.push(expectedDoneDate);

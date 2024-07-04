@@ -3,6 +3,11 @@
  * screenSaver: boolean
  * setScreenSaver: Function
  * newStudyData: Record<string, RawStudy[]>
+ * whatHowTemplate: Array<{
+ * what: string
+ * how: string
+ * dayAfter: number
+ * }>
  * }} AppContext
  */
 
@@ -43,6 +48,7 @@
  * how: string
  * done: boolean
  * doneDate: string
+ * dayAfter: number
  * }>} chapterStudyRoutines - doneDate is "YYYY-MM-DD"
  */
 
@@ -58,7 +64,11 @@
 
 /**
  * @typedef {Object} RawConfig
- * @property {Array<number>} studyGapsBetween
+ * @property {Array<{
+ * what: string
+ * how: string
+ * dayAfter: number
+ * }>} whatHowTemplate
  */
 
 /**
