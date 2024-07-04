@@ -20,7 +20,7 @@ export default function Home() {
     },
     {
       Comp: AddStudyPlan,
-      title: "학습 계획 추가",
+      title: "학습 계획 편집기",
       hidden: false,
       pinned: false,
     },

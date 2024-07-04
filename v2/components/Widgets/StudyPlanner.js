@@ -1,27 +1,35 @@
 import { useAppContext } from "../../hooks/useAppContext.js";
+import usePbData from "../../hooks/usePbData.js";
 import { html, useState } from "../../libs/preact.js";
 
 export default function StudyPlanner() {
   const { newStudyData } = useAppContext();
-  const subjects = Object.keys(newStudyData);
-  const [selectedSubject, setSelectedSubject] = useState(subjects[0]);
-  const subjectChapters = newStudyData[selectedSubject];
+  const { data: subjects, ready: subjectsReady } = usePbData("subjects");
+  const subjectIds = Object.keys(newStudyData);
+  const [selectedSubjectId, setSelectedSubjectId] = useState(subjectIds[0]);
+  const subjectChapters = newStudyData[selectedSubjectId];
+
+  if (!subjectsReady) {
+    return html`<div>Loading...</div>`;
+  }
 
   return html`
     <div className="grid gap-4">
       <div className="join">
-        ${subjects.map(
-          (subject) => html`
+        ${subjectIds.map((subjectId) => {
+          const subject = subjects.find(({ id }) => id === subjectId);
+
+          return html`
             <button
-              className="btn join-item ${selectedSubject === subject
+              className="btn join-item ${selectedSubjectId === subjectId
                 ? "btn-primary"
                 : ""}"
-              onClick=${() => setSelectedSubject(subject)}
+              onClick=${() => setSelectedSubjectId(subjectId)}
             >
-              ${subject}
+              ${subject.title}
             </button>
-          `
-        )}
+          `;
+        })}
       </div>
       <${SubjectBox} subjectChapters=${subjectChapters} />
     </div>
