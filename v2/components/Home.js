@@ -30,13 +30,8 @@ export default function Home() {
 
   if (menuOpen) {
     return html`
-      <div className="grid gap-8">
-        <a
-          className="text-6xl link link-hover"
-          onClick=${() => setMenuOpen(false)}
-        >
-          Menu
-        </a>
+      <div className="grid gap-4">
+        <${NavBar} menuOpen=${menuOpen} setMenuOpen=${setMenuOpen} />
         <div className="grid grid-cols-4 gap-4">
           ${widgets.map(
             (widget) => html`<${WidgetMenuBox} widget=${widget} />`
@@ -47,13 +42,8 @@ export default function Home() {
   }
 
   return html`
-    <div className="grid gap-8">
-      <a
-        className="text-6xl link link-hover"
-        onClick=${() => setMenuOpen(true)}
-      >
-        Home
-      </a>
+    <div className="grid gap-4">
+      <${NavBar} menuOpen=${menuOpen} setMenuOpen=${setMenuOpen} />
       <div className="flex flex-col flex-wrap max-h-screen">
         ${activeWidgets.map(
           ({ Comp, title }) => html`
@@ -95,6 +85,20 @@ function WidgetMenuBox({ widget }) {
         ${hidden ? html`<${AddButton} />` : html`<${RemoveButton} />`}
       </div>
       <h3 className="text-4xl">${title}</h3>
+    </div>
+  `;
+}
+
+function NavBar({ menuOpen, setMenuOpen }) {
+  function toggleMenu() {
+    setMenuOpen((prev) => !prev);
+  }
+
+  return html`
+    <div>
+      <a className="text-4xl link link-hover" onClick=${toggleMenu}>
+        ${menuOpen ? "Menu" : "Home"}
+      </a>
     </div>
   `;
 }

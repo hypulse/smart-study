@@ -7,7 +7,7 @@ export default function usePb() {
 
   useEffect(() => {
     const pbAuthChangeHandler = (e) => {
-      setAuthenticated(!!e.detail.authenticated);
+      setAuthenticated(() => e.detail.authenticated);
     };
 
     document.addEventListener("pb-auth-change", pbAuthChangeHandler);

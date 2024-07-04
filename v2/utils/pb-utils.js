@@ -13,7 +13,7 @@ const initPb = () => {
   return window.globalPb;
 };
 
-export const getPb = () => {
+const getPb = () => {
   if (!window.globalPb) {
     return initPb();
   }
@@ -21,20 +21,32 @@ export const getPb = () => {
   return window.globalPb;
 };
 
-export const signIn = async (identity, password) => {
+const signIn = async (identity, password) => {
   await window.globalPb
     .collection("users")
     .authWithPassword(identity, password);
 };
 
-export const signOut = () => {
+const signOut = () => {
   window.globalPb.authStore.clear();
 };
 
 /**
  * @param {DatabaseField&ConvBaseRoutine} routine
  */
-export const getImageUrl = async (collectionId, id, image) => {
+const getImageUrl = async (collectionId, id, image) => {
   const fileToken = await window.globalPb.files.getToken();
   return `${PB_URL}/api/files/${collectionId}/${id}/${image}?token=${fileToken}`;
 };
+
+const syncAuth = async () => {
+  try {
+    if (window.globalPb.authStore.isValid) {
+      await window.globalPb.collection("users").authRefresh();
+    }
+  } catch (_) {
+    window.globalPb.authStore.clear();
+  }
+};
+
+export { getPb, signIn, signOut, getImageUrl, syncAuth };

@@ -43,7 +43,7 @@ function SubjectBox({ subjectChapters }) {
 }
 
 function ChapterBox({ chapterData }) {
-  const { chapter, studyRoutines: chapterStudyRoutines } = chapterData;
+  const { chapter, chapterStudyRoutines } = chapterData;
   const doneCount = chapterStudyRoutines.filter(
     (routine) => routine.done
   ).length;

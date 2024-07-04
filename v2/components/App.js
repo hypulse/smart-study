@@ -1,97 +1,66 @@
 import { CONFIG_RECORD_ID, PB_URL } from "../env.js";
 import { AppContextProvider } from "../hooks/useAppContext.js";
 import usePb from "../hooks/usePb.js";
+import usePbData from "../hooks/usePbData.js";
 import { html, useEffect, useState } from "../libs/preact.js";
-import { signIn } from "../utils/pb-utils.js";
+import { signIn, syncAuth } from "../utils/pb-utils.js";
 import Home from "./Home.js";
+import Popup from "./Popup.js";
 
 export default function App() {
+  const dayOfWeekStrList = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
   const { authenticated } = usePb();
   const [screenSaver, setScreenSaver] = useState(false);
   const [dataReady, setDataReady] = useState(false);
-  const [rawConfigData, setRawConfigData] = useState({
-    studyGapsBetween: [1, 2, 3, 4, 5],
-  });
-  const [rawRoutineData, setRawRoutineData] = useState([
-    {
-      title: "Morning Routine",
-      start: "08:00",
-      end: "09:00",
-      description: "Wake up, brush teeth, shower, breakfast",
-      repeat: ["MON", "TUE", "WED", "THU", "FRI"],
-    },
-  ]);
-  const [rawUserRoutineData, setRawUserRoutineData] = useState([
-    {
-      title: "Rest",
-      start: "08:00",
-      end: "10:00",
-      date: "2021-10-01",
-      done: false,
-    },
-  ]);
-  const [rawStudyData, setRawStudyData] = useState([
-    {
-      subject: "The Art of War",
-      chapter: "Chapter 1",
-      studyRoutines: [
-        {
-          what: "Do something",
-          how: "Read, take notes, summarize",
-          done: true,
-          doneDate: "2024-07-01",
-        },
-        {
-          what: "Do something2",
-          how: "Read, take notes, summarize",
-          done: false,
-          doneDate: null,
-        },
-      ],
-    },
-    {
-      subject: "The Art of War",
-      chapter: "Chapter 2",
-      studyRoutines: [
-        {
-          what: "Do something",
-          how: "Read, take notes, summarize",
-          done: false,
-          doneDate: null,
-        },
-      ],
-    },
-    {
-      subject: "The Art of War 2",
-      chapter: "Chapter 1",
-      studyRoutines: [
-        {
-          what: "Do something",
-          how: "Read, take notes, summarize",
-          done: false,
-          doneDate: null,
-        },
-      ],
-    },
-  ]);
-  const [rawCalendarData, setRawCalendarData] = useState([
-    {
-      title: "Morning Routine",
-      description: "Wake up, brush teeth, shower, breakfast",
-      start: "2024-07-03T08:00:00",
-      end: "2024-07-03T09:00:00",
-      repeat: "", // "YEARLY", "MONTHLY"
-      allDay: true,
-    },
-  ]);
+  /**
+   * @type {{data: Array<RawRoutine>, ready: boolean}}
+   */
+  const { data: rawRoutineData, ready: rawRoutineReady } =
+    usePbData("routines");
+  /**
+   * @type {{data: Array<RawUserRoutine>, ready: boolean}}
+   */
+  const { data: rawUserRoutineData, ready: rawUserRoutineReady } =
+    usePbData("user_routines");
+  /**
+   * @type {{data: Array<RawStudy>, ready: boolean}}
+   */
+  const { data: rawStudyData, ready: rawStudyReady } = usePbData("studies");
+  /**
+   * @type {{data: Array<RawCalendar>, ready: boolean}}
+   */
+  const { data: rawCalendarData, ready: rawCalendarReady } =
+    usePbData("calendar_events");
+  /**
+   * @type {{data: RawConfig, ready: boolean}}
+   */
+  const { data: rawConfigData, ready: rawConfigReady } = usePbData(
+    "config",
+    CONFIG_RECORD_ID
+  );
+  const studyGapsBetween = rawConfigData.studyGapsBetween || [];
 
   useEffect(() => {
-    async function init() {
+    syncAuth();
+  }, []);
+
+  useEffect(() => {
+    if (
+      rawRoutineReady &&
+      rawUserRoutineReady &&
+      rawStudyReady &&
+      rawCalendarReady &&
+      rawConfigReady
+    ) {
       setDataReady(true);
     }
-
-    init();
-  }, []);
+  }, [
+    rawRoutineReady,
+    rawUserRoutineReady,
+    rawStudyReady,
+    rawCalendarReady,
+    rawConfigReady,
+  ]);
 
   if (!PB_URL || !CONFIG_RECORD_ID) {
     function getLocal() {
@@ -172,30 +141,32 @@ export default function App() {
     const data = {};
 
     rawStudyData.forEach((chapterData) => {
-      const { subject, studyRoutines } = chapterData;
+      const { subject, chapterStudyRoutines } = chapterData;
 
       const tempDates = [];
-      const studyRoutinesWithExpected = studyRoutines.map((routine, index) => {
-        const { done, doneDate } = routine;
-        let expectedDoneDate = null;
+      const studyRoutinesWithExpected = chapterStudyRoutines.map(
+        (routine, index) => {
+          const { done, doneDate } = routine;
+          let expectedDoneDate = null;
 
-        if (done) {
-          tempDates.push(doneDate);
-        } else {
-          const gap = rawConfigData.studyGapsBetween[index];
-          if (tempDates[index - 1]) {
-            expectedDoneDate = dayjs(tempDates[index - 1])
-              .add(gap, "day")
-              .format("YYYY-MM-DD");
+          if (done) {
+            tempDates.push(doneDate);
+          } else {
+            const gap = studyGapsBetween[index];
+            if (tempDates[index - 1]) {
+              expectedDoneDate = dayjs(tempDates[index - 1])
+                .add(gap, "day")
+                .format("YYYY-MM-DD");
+            }
+            tempDates.push(expectedDoneDate);
           }
-          tempDates.push(expectedDoneDate);
-        }
 
-        return {
-          ...routine,
-          expectedDoneDate,
-        };
-      });
+          return {
+            ...routine,
+            expectedDoneDate,
+          };
+        }
+      );
 
       if (!data[subject]) {
         data[subject] = [];
@@ -203,7 +174,7 @@ export default function App() {
 
       data[subject].push({
         ...chapterData,
-        studyRoutines: studyRoutinesWithExpected,
+        chapterStudyRoutines: studyRoutinesWithExpected,
       });
     });
 
@@ -262,7 +233,7 @@ export default function App() {
 
     Object.keys(studyData).forEach((subject) => {
       studyData[subject].forEach((chapterData) => {
-        const { studyRoutines: chapterStudyRoutines } = chapterData;
+        const { chapterStudyRoutines } = chapterData;
         chapterStudyRoutines.forEach((chapterRoutine) => {
           const { what, how, done, doneDate, expectedDoneDate } =
             chapterRoutine;
@@ -291,7 +262,6 @@ export default function App() {
   })();
   // repeat 보고 오늘 루틴 데이터로 필터링, userRoutineData에서 오늘 아닌 것을 필터링해서 추가, calendarData에서 allDay가 아닌 것을 추가
   const routineData = (() => {
-    const dayOfWeekStrList = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
     const dayOfWeek = dayjs().day();
     const dayOfWeekStr = dayOfWeekStrList[dayOfWeek];
     let todayRoutine = rawRoutineData.filter((routine) =>
@@ -388,17 +358,7 @@ export default function App() {
       }}
       children=${html`
         <${Home} />
-        <dialog id="my_modal_1" className="modal">
-          <div className="modal-box">
-            <h3 className="font-bold text-lg" id="modal-title"></h3>
-            <p className="py-4" id="modal-content"></p>
-            <div className="modal-action">
-              <form method="dialog">
-                <button className="btn">Close</button>
-              </form>
-            </div>
-          </div>
-        </dialog>
+        <${Popup} />
       `}
     />
   `;

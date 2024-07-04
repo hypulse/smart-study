@@ -1,11 +1,14 @@
+import { DB_PREFIX } from "../env.js";
 import { useEffect, useState } from "../libs/preact.js";
 import usePb from "./usePb.js";
 
-export default function usePbData(collectionId, recordId) {
+export default function usePbData(collectionId, recordId, autoFetch = true) {
+  collectionId = `${DB_PREFIX}_${collectionId}`;
   const { pb, authenticated } = usePb();
   const isGetOne = !!recordId;
   const defaultData = !!recordId ? {} : [];
   const [data, setData] = useState(defaultData);
+  const [ready, setReady] = useState(false);
 
   const fetchData = async () => {
     try {
@@ -20,6 +23,7 @@ export default function usePbData(collectionId, recordId) {
           .getFullList({ requestKey: null });
         setData(records);
       }
+      setReady(true);
     } catch (_) {
       resetData();
     }
@@ -27,6 +31,7 @@ export default function usePbData(collectionId, recordId) {
 
   const resetData = () => {
     setData(defaultData);
+    setReady(false);
   };
 
   useEffect(() => {
@@ -35,12 +40,15 @@ export default function usePbData(collectionId, recordId) {
       return;
     }
 
-    fetchData();
+    if (autoFetch) {
+      fetchData();
+    }
   }, [authenticated]);
 
   return {
     data,
-    setData,
+    ready,
     fetchData,
+    resetData,
   };
 }
