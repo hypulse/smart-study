@@ -2,37 +2,27 @@
   {
     "what": "최초 학습",
     "how": "",
-    "done": false,
-    "doneDate": "",
     "dayAfter": 0
   },
   {
     "what": "간단한 복습 (백지 복습)",
     "how": "",
-    "done": false,
-    "doneDate": "",
     "dayAfter": 1
   },
   {
     "what": "간단한 복습 (문제 풀이)",
     "how": "",
-    "done": false,
-    "doneDate": "",
     "dayAfter": 3
   },
   { "what": "미니 모의고사", "how": "", "dayAfter": 7 },
   {
     "what": "심화 복습 (오답 노트)",
     "how": "",
-    "done": false,
-    "doneDate": "",
     "dayAfter": 2
   },
   {
     "what": "기출 반복 전 마무리 학습",
     "how": "",
-    "done": false,
-    "doneDate": "",
     "dayAfter": 10
   }
 ]
