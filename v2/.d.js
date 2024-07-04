@@ -8,6 +8,9 @@
  * how: string
  * dayAfter: number
  * }>
+ * subjects: Array<{
+ * title: string
+ * }&DbFields>
  * }} AppContext
  */
 

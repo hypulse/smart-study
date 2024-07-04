@@ -1,17 +1,11 @@
 import { useAppContext } from "../../hooks/useAppContext.js";
-import usePbData from "../../hooks/usePbData.js";
 import { html, useState } from "../../libs/preact.js";
 
 export default function StudyPlanner() {
-  const { newStudyData } = useAppContext();
-  const { data: subjects, ready: subjectsReady } = usePbData("subjects");
+  const { newStudyData, subjects } = useAppContext();
   const subjectIds = Object.keys(newStudyData);
   const [selectedSubjectId, setSelectedSubjectId] = useState(subjectIds[0]);
   const subjectChapters = newStudyData[selectedSubjectId];
-
-  if (!subjectsReady) {
-    return html`<div>Loading...</div>`;
-  }
 
   return html`
     <div className="grid gap-4">

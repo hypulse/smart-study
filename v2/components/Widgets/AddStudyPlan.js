@@ -1,11 +1,11 @@
 import { DB_PREFIX } from "../../env.js";
+import { useAppContext } from "../../hooks/useAppContext.js";
 import usePb from "../../hooks/usePb.js";
-import usePbData from "../../hooks/usePbData.js";
 import { html, useState } from "../../libs/preact.js";
 
 export default function AddStudyPlan() {
   const { pb } = usePb();
-  const { data: subjects } = usePbData("subjects");
+  const { subjects } = useAppContext();
   const [selectedSubjectId, setSelectedSubjectId] = useState("");
   const [chapters, setChapters] = useState(null);
 
@@ -35,7 +35,7 @@ export default function AddStudyPlan() {
           )}
         </div>
         <button
-          className="btn"
+          className="btn btn-primary"
           disabled=${!selectedSubjectId}
           onClick=${loadSubjectData}
         >
