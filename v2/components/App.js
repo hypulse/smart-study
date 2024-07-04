@@ -26,7 +26,11 @@ export default function App() {
   /**
    * @type {{data: Array<RawStudy>, ready: boolean}}
    */
-  const { data: rawStudyData, ready: rawStudyReady } = usePbData("studies");
+  const {
+    data: rawStudyData,
+    ready: rawStudyReady,
+    fetchData: fetchRawStudyData,
+  } = usePbData("studies");
   /**
    * @type {{data: Array<RawCalendar>, ready: boolean}}
    */
@@ -143,6 +147,7 @@ export default function App() {
         newStudyData,
         whatHowTemplate,
         subjects,
+        fetchRawStudyData,
       }}
       children=${html`
         <${Home} />

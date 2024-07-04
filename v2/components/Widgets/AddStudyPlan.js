@@ -5,7 +5,7 @@ import { html, useState } from "../../libs/preact.js";
 
 export default function AddStudyPlan() {
   const { pb } = usePb();
-  const { subjects } = useAppContext();
+  const { subjects, fetchRawStudyData } = useAppContext();
   const [selectedSubject, setSelectedSubject] = useState(null);
   const [chapters, setChapters] = useState(null);
   const [tab, setTab] = useState("chapters");
@@ -105,6 +105,7 @@ export default function AddStudyPlan() {
       setTab("chapters");
       setRoutines([]);
       alert("저장되었습니다.");
+      fetchRawStudyData();
     });
   }
 

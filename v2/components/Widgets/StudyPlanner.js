@@ -1,4 +1,5 @@
 import { useAppContext } from "../../hooks/useAppContext.js";
+import usePb from "../../hooks/usePb.js";
 import { html, useState } from "../../libs/preact.js";
 
 export default function StudyPlanner() {
@@ -45,6 +46,8 @@ function SubjectBox({ subjectChapters }) {
 }
 
 function ChapterBox({ chapterData }) {
+  const { pb } = usePb();
+  const { fetchRawStudyData } = useAppContext();
   const { chapter, chapterStudyRoutines } = chapterData;
   const doneCount = chapterStudyRoutines.filter(
     (routine) => routine.done
@@ -66,8 +69,32 @@ function ChapterBox({ chapterData }) {
       </summary>
       <div className="collapse-content">
         <div className="grid gap-2">
-          ${chapterStudyRoutines.map((studyRoutine) => {
-            return html` <${ChapterRoutine} studyRoutine=${studyRoutine} /> `;
+          ${chapterStudyRoutines.map((studyRoutine, index) => {
+            async function checkDone() {
+              const newStudyRoutine = chapterStudyRoutines[index];
+              newStudyRoutine.done = true;
+              newStudyRoutine.doneDate = dayjs().format("YYYY-MM-DD");
+              const newChapterStudyRoutines = [
+                ...chapterStudyRoutines.slice(0, index),
+                newStudyRoutine,
+                ...chapterStudyRoutines.slice(index + 1),
+              ];
+              const data = {
+                chapterStudyRoutines: newChapterStudyRoutines,
+              };
+              const record = await pb
+                .collection("smst_studies")
+                .update(chapterData.id, data);
+              alert("저장되었습니다.");
+              fetchRawStudyData();
+            }
+
+            return html`
+              <${ChapterRoutine}
+                studyRoutine=${studyRoutine}
+                checkDone=${checkDone}
+              />
+            `;
           })}
         </div>
       </div>
@@ -75,7 +102,7 @@ function ChapterBox({ chapterData }) {
   `;
 }
 
-function ChapterRoutine({ studyRoutine }) {
+function ChapterRoutine({ studyRoutine, checkDone }) {
   const { what, how, done, doneDate, expectedDoneDate } = studyRoutine;
 
   if (done) {
@@ -109,7 +136,11 @@ function ChapterRoutine({ studyRoutine }) {
       <div className="form-control">
         <label className="cursor-pointer label">
           <span className="text-xl">${what}</span>
-          <input type="checkbox" className="checkbox checkbox-success" />
+          <input
+            type="checkbox"
+            className="checkbox checkbox-success"
+            onClick=${checkDone}
+          />
         </label>
       </div>
       <p>${how}</p>

@@ -11,6 +11,7 @@
  * subjects: Array<{
  * title: string
  * }&DbFields>
+ * fetchRawStudyData: Function
  * }} AppContext
  */
 
