@@ -6,18 +6,18 @@ import StudyPlanner from "./Widgets/StudyPlanner.js";
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
   const widgets = [
-    {
-      Comp: Clock,
-      title: "Clock",
-      hidden: false,
-      pinned: false,
-    },
-    {
-      Comp: Calendar,
-      title: "Calendar",
-      hidden: false,
-      pinned: false,
-    },
+    // {
+    //   Comp: Clock,
+    //   title: "Clock",
+    //   hidden: false,
+    //   pinned: false,
+    // },
+    // {
+    //   Comp: Calendar,
+    //   title: "Calendar",
+    //   hidden: false,
+    //   pinned: false,
+    // },
     {
       Comp: StudyPlanner,
       title: "학습 계획",

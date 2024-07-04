@@ -3,6 +3,7 @@ import { AppContextProvider } from "../hooks/useAppContext.js";
 import usePb from "../hooks/usePb.js";
 import usePbData from "../hooks/usePbData.js";
 import { html, useEffect, useState } from "../libs/preact.js";
+import { getNewStudyData } from "../utils/object-mapper.js";
 import { signIn, syncAuth } from "../utils/pb-utils.js";
 import Home from "./Home.js";
 import Popup from "./Popup.js";
@@ -45,13 +46,14 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    if (
-      rawRoutineReady &&
-      rawUserRoutineReady &&
-      rawStudyReady &&
-      rawCalendarReady &&
-      rawConfigReady
-    ) {
+    console.table({
+      rawRoutineReady,
+      rawUserRoutineReady,
+      rawStudyReady,
+      rawCalendarReady,
+      rawConfigReady,
+    });
+    if (rawStudyReady && rawConfigReady) {
       setDataReady(true);
     }
   }, [
@@ -136,225 +138,180 @@ export default function App() {
     return html`<div>Loading...</div>`;
   }
 
-  // rawStudyData에서 expected 계산하고 subject key로 구분된 flat한 각각의 배열로 제공
-  const studyData = (() => {
-    const data = {};
+  const newStudyData = getNewStudyData(rawStudyData);
 
-    rawStudyData.forEach((chapterData) => {
-      const { subject, chapterStudyRoutines } = chapterData;
+  // // rawCalendarData에서 allDay 계산해서 추가, studyData에서 expected가 추가된 것들 allDay로 넣기
+  // const calendarData = (() => {
+  //   const data = {
+  //     calendar: [],
+  //     study: [],
+  //   };
 
-      const tempDates = [];
-      const studyRoutinesWithExpected = chapterStudyRoutines.map(
-        (routine, index) => {
-          const { done, doneDate } = routine;
-          let expectedDoneDate = null;
+  //   rawCalendarData.forEach((calendar) => {
+  //     const item = {
+  //       title: calendar.title,
+  //       description: calendar.description,
+  //       allDay: calendar.allDay,
+  //     };
 
-          if (done) {
-            tempDates.push(doneDate);
-          } else {
-            const gap = studyGapsBetween[index];
-            if (tempDates[index - 1]) {
-              expectedDoneDate = dayjs(tempDates[index - 1])
-                .add(gap, "day")
-                .format("YYYY-MM-DD");
-            }
-            tempDates.push(expectedDoneDate);
-          }
+  //     let start = dayjs(calendar.start);
+  //     let end = dayjs(calendar.end);
 
-          return {
-            ...routine,
-            expectedDoneDate,
-          };
-        }
-      );
+  //     if (calendar.allDay) {
+  //       start = start.startOf("day");
+  //       end = end.endOf("day");
+  //     }
 
-      if (!data[subject]) {
-        data[subject] = [];
-      }
+  //     switch (calendar.repeat) {
+  //       case "YEARLY":
+  //         for (let i = 0; i < 2; i++) {
+  //           data.calendar.push({
+  //             ...item,
+  //             start: start.add(i, "year").toDate(),
+  //             end: end.add(i, "year").toDate(),
+  //           });
+  //         }
+  //         break;
+  //       case "MONTHLY":
+  //         for (let i = 0; i < 24; i++) {
+  //           data.calendar.push({
+  //             ...item,
+  //             start: start.add(i, "month").toDate(),
+  //             end: end.add(i, "month").toDate(),
+  //           });
+  //         }
+  //         break;
+  //       default:
+  //         data.calendar.push({
+  //           ...item,
+  //           start: start.toDate(),
+  //           end: end.toDate(),
+  //         });
+  //         break;
+  //     }
+  //   });
 
-      data[subject].push({
-        ...chapterData,
-        chapterStudyRoutines: studyRoutinesWithExpected,
-      });
-    });
+  //   Object.keys(studyData).forEach((subject) => {
+  //     studyData[subject].forEach((chapterData) => {
+  //       const { chapterStudyRoutines } = chapterData;
+  //       chapterStudyRoutines.forEach((chapterRoutine) => {
+  //         const { what, how, done, doneDate, expectedDoneDate } =
+  //           chapterRoutine;
 
-    return data;
-  })();
-  // rawCalendarData에서 allDay 계산해서 추가, studyData에서 expected가 추가된 것들 allDay로 넣기
-  const calendarData = (() => {
-    const data = {
-      calendar: [],
-      study: [],
-    };
+  //         if (!(done ? doneDate : expectedDoneDate)) {
+  //           return;
+  //         }
 
-    rawCalendarData.forEach((calendar) => {
-      const item = {
-        title: calendar.title,
-        description: calendar.description,
-        allDay: calendar.allDay,
-      };
+  //         data.study.push({
+  //           title: `${subject} (${what})`,
+  //           description: how,
+  //           start: dayjs(done ? doneDate : expectedDoneDate)
+  //             .startOf("day")
+  //             .toDate(),
+  //           end: dayjs(done ? doneDate : expectedDoneDate)
+  //             .endOf("day")
+  //             .toDate(),
+  //           allDay: true,
+  //           backgroundColor: done ? "green" : "silver",
+  //         });
+  //       });
+  //     });
+  //   });
 
-      let start = dayjs(calendar.start);
-      let end = dayjs(calendar.end);
+  //   return data;
+  // })();
+  // // repeat 보고 오늘 루틴 데이터로 필터링, userRoutineData에서 오늘 아닌 것을 필터링해서 추가, calendarData에서 allDay가 아닌 것을 추가
+  // const routineData = (() => {
+  //   const dayOfWeek = dayjs().day();
+  //   const dayOfWeekStr = dayOfWeekStrList[dayOfWeek];
+  //   let todayRoutine = rawRoutineData.filter((routine) =>
+  //     routine.repeat.includes(dayOfWeekStr)
+  //   );
+  //   todayRoutine = todayRoutine.map((routine) => {
+  //     const start = dayjs()
+  //       .set("hour", routine.start.split(":")[0])
+  //       .set("minute", routine.start.split(":")[1])
+  //       .toDate();
+  //     const end = dayjs()
+  //       .set("hour", routine.end.split(":")[0])
+  //       .set("minute", routine.end.split(":")[1])
+  //       .toDate();
 
-      if (calendar.allDay) {
-        start = start.startOf("day");
-        end = end.endOf("day");
-      }
+  //     return {
+  //       title: routine.title,
+  //       description: routine.description,
+  //       start,
+  //       end,
+  //     };
+  //   });
+  //   const todayUserRoutineData = rawUserRoutineData.filter(
+  //     (routine) => routine.date === dayjs().format("YYYY-MM-DD")
+  //   );
+  //   const todayUserDone = todayUserRoutineData
+  //     .filter((routine) => routine.done)
+  //     .map((routine) => {
+  //       const start = dayjs()
+  //         .set("hour", routine.start.split(":")[0])
+  //         .set("minute", routine.start.split(":")[1])
+  //         .toDate();
+  //       const end = dayjs()
+  //         .set("hour", routine.end.split(":")[0])
+  //         .set("minute", routine.end.split(":")[1])
+  //         .toDate();
 
-      switch (calendar.repeat) {
-        case "YEARLY":
-          for (let i = 0; i < 2; i++) {
-            data.calendar.push({
-              ...item,
-              start: start.add(i, "year").toDate(),
-              end: end.add(i, "year").toDate(),
-            });
-          }
-          break;
-        case "MONTHLY":
-          for (let i = 0; i < 24; i++) {
-            data.calendar.push({
-              ...item,
-              start: start.add(i, "month").toDate(),
-              end: end.add(i, "month").toDate(),
-            });
-          }
-          break;
-        default:
-          data.calendar.push({
-            ...item,
-            start: start.toDate(),
-            end: end.toDate(),
-          });
-          break;
-      }
-    });
+  //       return {
+  //         title: routine.title,
+  //         description: routine.description,
+  //         start,
+  //         end,
+  //       };
+  //     });
+  //   const todayUserToDo = todayUserRoutineData
+  //     .filter((routine) => !routine.done)
+  //     .map((routine) => {
+  //       const start = dayjs()
+  //         .set("hour", routine.start.split(":")[0])
+  //         .set("minute", routine.start.split(":")[1])
+  //         .toDate();
+  //       const end = dayjs()
+  //         .set("hour", routine.end.split(":")[0])
+  //         .set("minute", routine.end.split(":")[1])
+  //         .toDate();
 
-    Object.keys(studyData).forEach((subject) => {
-      studyData[subject].forEach((chapterData) => {
-        const { chapterStudyRoutines } = chapterData;
-        chapterStudyRoutines.forEach((chapterRoutine) => {
-          const { what, how, done, doneDate, expectedDoneDate } =
-            chapterRoutine;
-
-          if (!(done ? doneDate : expectedDoneDate)) {
-            return;
-          }
-
-          data.study.push({
-            title: `${subject} (${what})`,
-            description: how,
-            start: dayjs(done ? doneDate : expectedDoneDate)
-              .startOf("day")
-              .toDate(),
-            end: dayjs(done ? doneDate : expectedDoneDate)
-              .endOf("day")
-              .toDate(),
-            allDay: true,
-            backgroundColor: done ? "green" : "silver",
-          });
-        });
-      });
-    });
-
-    return data;
-  })();
-  // repeat 보고 오늘 루틴 데이터로 필터링, userRoutineData에서 오늘 아닌 것을 필터링해서 추가, calendarData에서 allDay가 아닌 것을 추가
-  const routineData = (() => {
-    const dayOfWeek = dayjs().day();
-    const dayOfWeekStr = dayOfWeekStrList[dayOfWeek];
-    let todayRoutine = rawRoutineData.filter((routine) =>
-      routine.repeat.includes(dayOfWeekStr)
-    );
-    todayRoutine = todayRoutine.map((routine) => {
-      const start = dayjs()
-        .set("hour", routine.start.split(":")[0])
-        .set("minute", routine.start.split(":")[1])
-        .toDate();
-      const end = dayjs()
-        .set("hour", routine.end.split(":")[0])
-        .set("minute", routine.end.split(":")[1])
-        .toDate();
-
-      return {
-        title: routine.title,
-        description: routine.description,
-        start,
-        end,
-      };
-    });
-    const todayUserRoutineData = rawUserRoutineData.filter(
-      (routine) => routine.date === dayjs().format("YYYY-MM-DD")
-    );
-    const todayUserDone = todayUserRoutineData
-      .filter((routine) => routine.done)
-      .map((routine) => {
-        const start = dayjs()
-          .set("hour", routine.start.split(":")[0])
-          .set("minute", routine.start.split(":")[1])
-          .toDate();
-        const end = dayjs()
-          .set("hour", routine.end.split(":")[0])
-          .set("minute", routine.end.split(":")[1])
-          .toDate();
-
-        return {
-          title: routine.title,
-          description: routine.description,
-          start,
-          end,
-        };
-      });
-    const todayUserToDo = todayUserRoutineData
-      .filter((routine) => !routine.done)
-      .map((routine) => {
-        const start = dayjs()
-          .set("hour", routine.start.split(":")[0])
-          .set("minute", routine.start.split(":")[1])
-          .toDate();
-        const end = dayjs()
-          .set("hour", routine.end.split(":")[0])
-          .set("minute", routine.end.split(":")[1])
-          .toDate();
-
-        return {
-          title: routine.title,
-          description: routine.description,
-          start,
-          end,
-        };
-      });
-    return { todayRoutine, todayUserDone, todayUserToDo };
-  })();
-  // calendarData에서 allDay인 것을 구분해서 추가
-  const allDayTodayData = () => {
-    let allDayToday = [];
-    calendarData.calendar.forEach((calendar) => {
-      if (calendar.allDay) {
-        allDay.push(calendar);
-      }
-    });
-    calendarData.study.forEach((study) => {
-      if (study.allDay) {
-        allDay.push(study);
-      }
-    });
-    allDayToday = allDayToday.filter((calendar) => {
-      return dayjs().isBetween(dayjs(calendar.start), dayjs(calendar.end));
-    });
-    return allDayToday;
-  };
+  //       return {
+  //         title: routine.title,
+  //         description: routine.description,
+  //         start,
+  //         end,
+  //       };
+  //     });
+  //   return { todayRoutine, todayUserDone, todayUserToDo };
+  // })();
+  // // calendarData에서 allDay인 것을 구분해서 추가
+  // const allDayTodayData = () => {
+  //   let allDayToday = [];
+  //   calendarData.calendar.forEach((calendar) => {
+  //     if (calendar.allDay) {
+  //       allDay.push(calendar);
+  //     }
+  //   });
+  //   calendarData.study.forEach((study) => {
+  //     if (study.allDay) {
+  //       allDay.push(study);
+  //     }
+  //   });
+  //   allDayToday = allDayToday.filter((calendar) => {
+  //     return dayjs().isBetween(dayjs(calendar.start), dayjs(calendar.end));
+  //   });
+  //   return allDayToday;
+  // };
 
   return html`
     <${AppContextProvider}
       value=${{
         screenSaver,
         setScreenSaver,
-        studyData,
-        calendarData,
-        routineData,
-        allDayTodayData,
+        newStudyData,
       }}
       children=${html`
         <${Home} />

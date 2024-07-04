@@ -1,4 +1,12 @@
 /**
+ * @typedef {{
+ * screenSaver: boolean
+ * setScreenSaver: Function
+ * newStudyData: Record<string, RawStudy[]>
+ * }} AppContext
+ */
+
+/**
  * @typedef {Object} DbFields
  * @property {string} id
  * @property {string} collectionId
@@ -28,8 +36,8 @@
 
 /**
  * @typedef {Object} RawStudy
- * @property {string} subject - title of the routine
- * @property {string} chapter - "HH:MM"
+ * @property {string} subject - subject of the study
+ * @property {string} chapter - chapter of the study
  * @property {Array<{
  * what: string
  * how: string
@@ -51,4 +59,17 @@
 /**
  * @typedef {Object} RawConfig
  * @property {Array<number>} studyGapsBetween
+ */
+
+/**
+ * @typedef {Object} NewStudy
+ * @property {string} subject - subject of the study
+ * @property {string} chapter - chapter of the study
+ * @property {Array<{
+ * what: string
+ * how: string
+ * done: boolean
+ * doneDate: string
+ * expectedDoneDate: string
+ * }>} chapterStudyRoutines - doneDate and expectedDoneDate is "YYYY-MM-DD"
  */

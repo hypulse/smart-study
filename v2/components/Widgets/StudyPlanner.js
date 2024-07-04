@@ -2,10 +2,10 @@ import { useAppContext } from "../../hooks/useAppContext.js";
 import { html, useState } from "../../libs/preact.js";
 
 export default function StudyPlanner() {
-  const { studyData } = useAppContext();
-  const subjects = Object.keys(studyData);
+  const { newStudyData } = useAppContext();
+  const subjects = Object.keys(newStudyData);
   const [selectedSubject, setSelectedSubject] = useState(subjects[0]);
-  const subjectChapters = studyData[selectedSubject];
+  const subjectChapters = newStudyData[selectedSubject];
 
   return html`
     <div className="grid gap-4">
