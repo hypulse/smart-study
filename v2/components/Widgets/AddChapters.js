@@ -34,9 +34,9 @@ export default function AddChapters() {
 
   async function createChapters() {
     if (!selectedSubject) return;
-    const promises = chapters.map((chapter) => {
+    for (const chapter of chapters) {
       if (chapter.id) {
-        return pb.collection(`${DB_PREFIX}_chapters`).update(
+        await pb.collection(`${DB_PREFIX}_chapters`).update(
           chapter.id,
           {
             title: chapter.title,
@@ -46,7 +46,7 @@ export default function AddChapters() {
           }
         );
       } else {
-        return pb.collection(`${DB_PREFIX}_chapters`).create(
+        await pb.collection(`${DB_PREFIX}_chapters`).create(
           {
             title: chapter.title,
             toDos: [],
@@ -57,11 +57,7 @@ export default function AddChapters() {
           }
         );
       }
-    });
-    await Promise.all(promises).catch((e) => {
-      console.error(e);
-      alert("Failed to create/update chapters");
-    });
+    }
     alert("Chapters Created/Updated");
     requestUpdateRawData();
   }
