@@ -4,13 +4,13 @@ import usePb from "../../hooks/usePb.js";
 import usePbData from "../../hooks/usePbData.js";
 import { html, useEffect, useState } from "../../libs/preact.js";
 import getChaptersBySubject from "../../utils/obj-mappers/getChaptersBySubject.js";
-import getSubjectIdTitleMap from "../../utils/obj-mappers/getSubjectIdTitleMap.js";
 import { syncAuth } from "../../utils/pb-utils.js";
 import Home from "../HomeComps/Home.js";
 import Loading from "../Loading.js";
 import EnterCred from "./EnterCred.js";
 import EnterDataInfo from "./EnterDataInfo.js";
 import Popup from "./Popup.js";
+import getCalendarEventsOfChapters from "../../utils/obj-mappers/getCalendarEventsOfChapters.js";
 
 export default function App() {
   const { authenticated } = usePb();
@@ -63,18 +63,22 @@ export default function App() {
   }
 
   const chaptersBySubject = getChaptersBySubject(rawChapters, rawSubjects);
-  const subjectIdTitleMap = getSubjectIdTitleMap(rawSubjects);
+  const calendarEvents = (() => {
+    const calendarEventsOfChapters = getCalendarEventsOfChapters(
+      chaptersBySubject,
+      rawSubjects
+    );
+    return [...calendarEventsOfChapters];
+  })();
 
   return html`
     <${AppContextProvider}
       value=${{
         rawConfig,
         rawSubjects,
-        updateRawSubjects,
         rawChapters,
-        updateRawChapters,
         chaptersBySubject,
-        subjectIdTitleMap,
+        calendarEvents,
       }}
       children=${html`
         <${Home} />

@@ -1,8 +1,10 @@
+import { useAppContext } from "../../hooks/useAppContext.js";
 import { html, useEffect, useRef } from "../../libs/preact.js";
 import showModal from "../../utils/showModal.js";
 
 export default function Calendar() {
   const ref = useRef();
+  const { calendarEvents } = useAppContext();
 
   useEffect(() => {
     if (!ref.current || !window.FullCalendar) {
@@ -11,7 +13,7 @@ export default function Calendar() {
 
     const calendar = new FullCalendar.Calendar(ref.current, {
       initialView: "dayGridMonth",
-      events: [],
+      events: calendarEvents,
       editable: false,
       headerToolbar: {
         center: "dayGridMonth,timeGridWeek,timeGridDay",
@@ -26,7 +28,7 @@ export default function Calendar() {
     return () => {
       calendar.destroy();
     };
-  }, []);
+  }, [calendarEvents]);
 
   return html`<div ref=${ref} />`;
 }

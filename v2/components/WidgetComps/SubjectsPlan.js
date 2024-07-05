@@ -2,11 +2,13 @@ import { DB_PREFIX } from "../../env.js";
 import { useAppContext } from "../../hooks/useAppContext.js";
 import usePb from "../../hooks/usePb.js";
 import { html, useState } from "../../libs/preact.js";
+import getSubjectIdTitleMap from "../../utils/obj-mappers/getSubjectIdTitleMap.js";
 import requestUpdateRawData from "../../utils/requestUpdateRawData.js";
 
 export default function SubjectsPlan() {
   const [selectedSubjectId, setSelectedSubjectId] = useState(null);
-  const { chaptersBySubject, subjectIdTitleMap } = useAppContext();
+  const { chaptersBySubject, rawSubjects } = useAppContext();
+  const subjectIdTitleMap = getSubjectIdTitleMap(rawSubjects);
   const subjects = Object.keys(chaptersBySubject);
   const chapters = chaptersBySubject[selectedSubjectId] || [];
 

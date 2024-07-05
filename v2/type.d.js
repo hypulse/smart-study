@@ -57,12 +57,21 @@
 
 /**
  * @typedef {{
+ * title: string
+ * description: string
+ * start: Date
+ * end: Date
+ * allDay: boolean
+ * backgroundColor: string
+ * }} CalendarEvent
+ */
+
+/**
+ * @typedef {{
  * rawConfig: RawConfig
  * rawSubjects: RawSubject[]
- * updateRawSubjects: function
  * rawChapters: RawChapter[]
- * updateRawChapters: function
  * chaptersBySubject: Record<string, NewChapter[]>
- * subjectIdTitleMap: Record<string, string>
+ * calendarEvents: CalendarEvent[]
  * }} AppContext
  */
