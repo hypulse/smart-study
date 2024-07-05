@@ -36,6 +36,7 @@ function FullScreen({ comp, setComp }) {
     <div className="fixed inset-0 bg-base-100">
       <button
         className="btn btn-square btn-primary absolute top-2 right-2"
+        style="z-index: 9999;"
         onClick=${closeFullScreen}
       >
         <svg
