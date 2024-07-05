@@ -16,7 +16,11 @@ export default function AddChapters() {
       .getList(1, 50, {
         filter: `subject = '${subject.id}'`,
       });
-    items = items.sort((a, b) => a.chapter - b.chapter);
+    items = items.sort((a, b) => {
+      const indexA = Number(a.title.split(".")[0]);
+      const indexB = Number(b.title.split(".")[0]);
+      return indexA - indexB;
+    });
     setChapters(items);
     setSelectedSubject(subject);
   }
