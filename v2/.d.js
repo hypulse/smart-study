@@ -18,6 +18,17 @@
  */
 
 /**
+ * @typedef {{
+ * what: string
+ * how: string
+ * dayAfter: number
+ * done: boolean
+ * doneDate: string
+ * expectedDoneDate: string
+ * }} NewToDo
+ */
+
+/**
  * @typedef {ToDo[]} ToDos
  */
 
@@ -44,10 +55,19 @@
 
 /**
  * @typedef {{
+ * subject: string
+ * title: string
+ * toDos: NewToDo[]
+ * }} NewChapter
+ */
+
+/**
+ * @typedef {{
  * rawConfig: RawConfig
  * RawSubjects: RawSubject[]
  * updateRawSubjects: function
  * RawChapters: RawChapter[]
  * updateRawChapters: function
+ * chaptersBySubject: Record<string, NewChapter[]>
  * }} AppContext
  */

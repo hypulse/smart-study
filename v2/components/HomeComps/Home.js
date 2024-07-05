@@ -3,10 +3,17 @@ import WidgetMenuBox from "./WIdgetMenuBox.js";
 import Calendar from "../WidgetComps/Calendar.js";
 import AddSubject from "../WidgetComps/AddSubject.js";
 import AddChapters from "../WidgetComps/AddChapters.js";
+import Clock from "../WidgetComps/Clock.js";
 
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
   const widgets = [
+    {
+      Comp: Clock,
+      title: "시계",
+      hidden: false,
+      pinned: false,
+    },
     {
       Comp: Calendar,
       title: "달력",
