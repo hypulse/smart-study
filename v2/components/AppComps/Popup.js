@@ -1,4 +1,4 @@
-import { html } from "../libs/preact.js";
+import { html } from "../../libs/preact.js";
 
 export default function Popup() {
   return html`

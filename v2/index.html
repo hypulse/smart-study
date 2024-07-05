@@ -6,7 +6,7 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
     />
-    <title>Smart Study</title>
+    <title>Smart Study v2</title>
     <script src="https://cdn.jsdelivr.net/npm/dayjs@1.11.7/dayjs.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/dayjs@1.11.7/plugin/isBetween.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/dayjs@1.11.7/plugin/utc.min.js"></script>
@@ -26,19 +26,5 @@
   <body>
     <div id="app"></div>
     <script src="./index.js" type="module"></script>
-    <script>
-      window.showModal = (text, title = "Alert") => {
-        const modal = document.getElementById("my_modal_1");
-        if (text) {
-          modal.querySelector("#modal-content").innerText = text;
-        } else {
-          modal.querySelector("#modal-content").innerText = "";
-        }
-        if (title) {
-          modal.querySelector("#modal-title").innerText = title;
-        }
-        modal.showModal();
-      };
-    </script>
   </body>
 </html>
