@@ -3,7 +3,7 @@ import { AppContextProvider } from "../../hooks/useAppContext.js";
 import usePb from "../../hooks/usePb.js";
 import usePbData from "../../hooks/usePbData.js";
 import { html, useEffect, useState } from "../../libs/preact.js";
-import { getChaptersBySubject } from "../../utils/object-mapper.js";
+import getChaptersBySubject from "../../utils/obj-mappers/getChaptersBySubject.js";
 import { syncAuth } from "../../utils/pb-utils.js";
 import Home from "../HomeComps/Home.js";
 import Loading from "../Loading.js";
@@ -51,7 +51,8 @@ export default function App() {
     return html`<${Loading} />`;
   }
 
-  const chaptersBySubject = getChaptersBySubject(rawSubjects, rawChapters);
+  const chaptersBySubject = getChaptersBySubject(rawChapters, rawSubjects);
+  console.table(chaptersBySubject);
 
   return html`
     <${AppContextProvider}

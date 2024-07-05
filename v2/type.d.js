@@ -12,36 +12,30 @@
  * what: string
  * how: string
  * dayAfter: number
- * done: boolean
- * doneDate: string
- * }} ToDo
+ * }} ToDoTypeA
  */
 
 /**
  * @typedef {{
- * what: string
- * how: string
- * dayAfter: number
  * done: boolean
  * doneDate: string
- * expectedDoneDate: string
- * }} NewToDo
+ * }} ToDoTypeB
  */
 
 /**
- * @typedef {ToDo[]} ToDos
+ * @typedef {ToDoTypeA&ToDoTypeB&{expectedDoneDate: string}} NewToDo
  */
 
 /**
  * @typedef {{
  * title: string
- * toDosForm: ToDos
+ * toDosForm: ToDoTypeA[]
  * }} RawSubject
  */
 
 /**
  * @typedef {{
- * toDosExample: ToDos
+ * toDosExample: ToDoTypeA[]
  * }} RawConfig
  */
 
@@ -49,7 +43,7 @@
  * @typedef {{
  * subject: string
  * title: string
- * toDos: ToDos
+ * toDos?: ToDoTypeB[]
  * }} RawChapter
  */
 
