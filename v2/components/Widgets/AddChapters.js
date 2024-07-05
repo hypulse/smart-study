@@ -58,7 +58,10 @@ export default function AddChapters() {
         );
       }
     });
-    await Promise.all(promises);
+    await Promise.all(promises).catch((e) => {
+      console.error(e);
+      alert("Failed to create/update chapters");
+    });
     alert("Chapters Created/Updated");
     requestUpdateRawData();
   }
