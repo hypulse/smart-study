@@ -36,15 +36,26 @@ export default function AddChapters() {
     if (!selectedSubject) return;
     const promises = chapters.map((chapter) => {
       if (chapter.id) {
-        return pb.collection(`${DB_PREFIX}_chapters`).update(chapter.id, {
-          title: chapter.title,
-        });
+        return pb.collection(`${DB_PREFIX}_chapters`).update(
+          chapter.id,
+          {
+            title: chapter.title,
+          },
+          {
+            requestKey: null,
+          }
+        );
       } else {
-        return pb.collection(`${DB_PREFIX}_chapters`).create({
-          title: chapter.title,
-          toDos: [],
-          subject: selectedSubject.id,
-        });
+        return pb.collection(`${DB_PREFIX}_chapters`).create(
+          {
+            title: chapter.title,
+            toDos: [],
+            subject: selectedSubject.id,
+          },
+          {
+            requestKey: null,
+          }
+        );
       }
     });
     await Promise.all(promises);
