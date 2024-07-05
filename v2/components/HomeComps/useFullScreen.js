@@ -53,7 +53,9 @@ function FullScreen({ comp, setComp }) {
           />
         </svg>
       </button>
-      <${Comp} />
+      <div className="p-4 h-full overflow-auto">
+        <${Comp} />
+      </div>
     </div>
   `;
 }
