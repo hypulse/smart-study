@@ -7,21 +7,21 @@ export default function AddChapters() {
   const { rawSubjects } = useAppContext();
   const { pb } = usePb();
   const [chapters, setChapters] = useState([]);
+  const [selectedSubject, setSelectedSubject] = useState(null);
 
-  /**
-   * load chapters of a subject
-   */
-  async function loadChapters(id) {
+  async function selectSubject(subject) {
     let { items } = await pb
       .collection(`${DB_PREFIX}_chapters`)
       .getList(1, 50, {
-        filter: `subject = '${id}'`,
+        filter: `subject = '${subject.id}'`,
       });
     items = items.sort((a, b) => a.chapter - b.chapter);
     setChapters(items);
+    setSelectedSubject(subject);
   }
 
   function addChapter() {
+    if (!selectedSubject) return;
     setChapters((prevChapters) => [...prevChapters, { title: "", toDos: [] }]);
   }
 
@@ -31,14 +31,38 @@ export default function AddChapters() {
     setChapters(newChapters);
   }
 
+  async function createChapters() {
+    if (!selectedSubject) return;
+    const promises = chapters.map((chapter) => {
+      if (chapter.id) {
+        return pb.collection(`${DB_PREFIX}_chapters`).update(chapter.id, {
+          title: chapter.title,
+        });
+      } else {
+        return pb.collection(`${DB_PREFIX}_chapters`).create({
+          title: chapter.title,
+          toDos: [],
+          subject: selectedSubject.id,
+        });
+      }
+    });
+    await Promise.all(promises);
+    alert("Chapters Created/Updated");
+  }
+
   return html`
     <div className="grid gap-2">
       <div className="join">
         ${rawSubjects.map(
           (subject) => html`
             <button
-              className="btn btn-sm join-item"
-              onClick=${() => loadChapters(subject.id)}
+              className="btn btn-sm join-item ${selectedSubject &&
+              selectedSubject.id === subject.id
+                ? "btn-primary"
+                : ""}"
+              onClick=${() => {
+                selectSubject(subject);
+              }}
             >
               ${subject.title}
             </button>
@@ -57,8 +81,13 @@ export default function AddChapters() {
             />
           `
         )}
+        <button className="btn btn-sm btn-outline" onClick=${addChapter}>
+          Add Chapter
+        </button>
       </div>
-      <button className="btn btn-primary">Add Chapters</button>
+      <button className="btn btn-primary" onClick=${createChapters}>
+        Create/Update Chapters
+      </button>
     </div>
   `;
 }

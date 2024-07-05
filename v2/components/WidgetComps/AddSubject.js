@@ -16,7 +16,7 @@ export default function AddSubject() {
     setSelectedSubject(subject);
   }
 
-  async function updateSubject() {
+  async function createSubject() {
     if (selectedSubject) {
       await pb.collection(`${DB_PREFIX}_subjects`).update(selectedSubject.id, {
         title: subjectName,
@@ -59,7 +59,7 @@ export default function AddSubject() {
         onChange=${(e) => setSubjectName(e.target.value)}
       />
       <${ToDosBox} toDos=${toDos} setToDos=${setToDos} />
-      <button className="btn btn-primary" onClick=${updateSubject}>
+      <button className="btn btn-primary" onClick=${createSubject}>
         Create/Update Subject
       </button>
     </div>
