@@ -1,13 +1,20 @@
 import { html } from "../../libs/preact.js";
 
-export default function WidgetMenuBox({ widget }) {
-  const { title, hidden, pinned } = widget;
-  const styleOpacity = hidden ? "opacity-50" : "opacity-100";
+export default function MenuWidgetBox({ widget, openFullScreen }) {
+  const { title, hidden, pinned, Comp } = widget;
+
+  function openComp() {
+    openFullScreen(Comp);
+  }
 
   return html`
-    <div className="grid gap-4 hover:opacity-100 p-2 ${styleOpacity}">
+    <div
+      className="grid gap-4 hover:opacity-100 p-2 ${hidden
+        ? "opacity-50"
+        : "opacity-100"}"
+    >
       <div className="flex gap-2">
-        <${FullScreenButton} />
+        <${FullScreenButton} openComp=${openComp} />
         <${PinButton} pinned=${pinned} />
         <${HiddenToggleButton} hidden=${hidden} />
       </div>
@@ -16,9 +23,9 @@ export default function WidgetMenuBox({ widget }) {
   `;
 }
 
-function FullScreenButton() {
+function FullScreenButton({ openComp }) {
   return html`
-    <button className="btn btn-primary btn-square btn-sm">
+    <button className="btn btn-primary btn-square btn-sm" onClick=${openComp}>
       <svg
         xmlns="http://www.w3.org/2000/svg"
         enable-background="new 0 0 24 24"
@@ -36,10 +43,12 @@ function FullScreenButton() {
 }
 
 function PinButton({ pinned }) {
-  const styleOpacity = pinned ? "opacity-100" : "opacity-50";
-
   return html`
-    <button className="btn btn-primary btn-square btn-sm ${styleOpacity}">
+    <button
+      className="btn btn-primary btn-square btn-sm ${pinned
+        ? "opacity-100"
+        : "opacity-50"}"
+    >
       <svg
         xmlns="http://www.w3.org/2000/svg"
         enable-background="new 0 0 24 24"

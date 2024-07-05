@@ -6,11 +6,11 @@ import getSubjectIdTitleMap from "../../utils/obj-mappers/getSubjectIdTitleMap.j
 import requestUpdateRawData from "../../utils/requestUpdateRawData.js";
 
 export default function SubjectsPlan() {
-  const [selectedSubjectId, setSelectedSubjectId] = useState(null);
   const { chaptersBySubject, rawSubjects } = useAppContext();
-  const subjectIdTitleMap = getSubjectIdTitleMap(rawSubjects);
   const subjects = Object.keys(chaptersBySubject);
+  const [selectedSubjectId, setSelectedSubjectId] = useState(subjects[0]);
   const chapters = chaptersBySubject[selectedSubjectId] || [];
+  const subjectIdTitleMap = getSubjectIdTitleMap(rawSubjects);
 
   return html`
     <div className="grid gap-2">

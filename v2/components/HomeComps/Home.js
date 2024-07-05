@@ -1,13 +1,15 @@
 import { html, useState } from "../../libs/preact.js";
-import WidgetMenuBox from "./WIdgetMenuBox.js";
-import Calendar from "../WidgetComps/Calendar.js";
-import AddSubject from "../WidgetComps/AddSubject.js";
-import AddChapters from "../WidgetComps/AddChapters.js";
-import Clock from "../WidgetComps/Clock.js";
-import SubjectsPlan from "../WidgetComps/SubjectsPlan.js";
+import Calendar from "../Widgets/Calendar.js";
+import AddSubject from "../Widgets/AddSubject.js";
+import AddChapters from "../Widgets/AddChapters.js";
+import Clock from "../Widgets/Clock.js";
+import SubjectsPlan from "../Widgets/SubjectsPlan.js";
 import NavBar from "./NavBar.js";
+import MenuWidgetBox from "./MenuWidgetBox.js";
+import useFullScreen from "./useFullScreen.js";
 
 export default function Home() {
+  const { FullScreen, openFullScreen } = useFullScreen();
   const [menuOpen, setMenuOpen] = useState(false);
   const widgets = [
     {
@@ -31,44 +33,56 @@ export default function Home() {
     {
       Comp: AddSubject,
       title: "과목 추가",
-      hidden: false,
+      hidden: true,
       pinned: false,
     },
     {
       Comp: AddChapters,
       title: "챕터 추가",
-      hidden: false,
+      hidden: true,
       pinned: false,
     },
   ];
 
+  return html`
+    <${NavBar} menuOpen=${menuOpen} setMenuOpen=${setMenuOpen} />
+    <${Main}
+      menuOpen=${menuOpen}
+      widgets=${widgets}
+      openFullScreen=${openFullScreen}
+    />
+    <${FullScreen} />
+  `;
+}
+
+function Main({ menuOpen, widgets, openFullScreen }) {
   const activeWidgets = widgets.filter((widget) => !widget.hidden);
 
   if (menuOpen) {
     return html`
-      <div className="grid gap-4">
-        <${NavBar} menuOpen=${menuOpen} setMenuOpen=${setMenuOpen} />
-        <div className="grid grid-cols-4 gap-4">
-          ${widgets.map(
-            (widget) => html`<${WidgetMenuBox} widget=${widget} />`
-          )}
-        </div>
+      <div className="grid grid-cols-4 gap-4">
+        ${widgets.map(
+          (widget) =>
+            html`
+              <${MenuWidgetBox}
+                widget=${widget}
+                openFullScreen=${openFullScreen}
+              />
+            `
+        )}
       </div>
     `;
   }
 
   return html`
-    <div className="grid gap-4">
-      <${NavBar} menuOpen=${menuOpen} setMenuOpen=${setMenuOpen} />
-      <div className="flex flex-col flex-wrap max-h-screen">
-        ${activeWidgets.map(
-          ({ Comp, title }) => html`
-            <div className="w-1/2 p-2" key=${title}>
-              <${Comp} />
-            </div>
-          `
-        )}
-      </div>
+    <div className="flex flex-col flex-wrap max-h-screen">
+      ${activeWidgets.map(
+        ({ Comp, title }) => html`
+          <div className="w-1/2 p-2" key=${title}>
+            <${Comp} />
+          </div>
+        `
+      )}
     </div>
   `;
 }
