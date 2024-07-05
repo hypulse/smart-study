@@ -454,5 +454,5 @@
   "theme_color": "#000000",
   "background_color": "#000000",
   "short_name": "Smart Study",
-  "start_url": "/index.html"
+  "start_url": "/smart-study/v2/index.html"
 }
