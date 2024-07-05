@@ -1,4 +1,5 @@
 import { html, useEffect, useRef } from "../../libs/preact.js";
+import showModal from "../../utils/showModal.js";
 
 export default function Calendar() {
   const ref = useRef();
@@ -16,10 +17,7 @@ export default function Calendar() {
         center: "dayGridMonth,timeGridWeek,timeGridDay",
       },
       eventClick: function (data) {
-        window.showModal(
-          data.event.extendedProps.description,
-          data.event.title
-        );
+        showModal(data.event.extendedProps.description, data.event.title);
       },
     });
 

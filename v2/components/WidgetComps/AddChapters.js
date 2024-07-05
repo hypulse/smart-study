@@ -2,6 +2,7 @@ import { DB_PREFIX } from "../../env.js";
 import { useAppContext } from "../../hooks/useAppContext.js";
 import usePb from "../../hooks/usePb.js";
 import { html, useState } from "../../libs/preact.js";
+import requestUpdateRawData from "../../utils/requestUpdateRawData.js";
 
 export default function AddChapters() {
   const { rawSubjects } = useAppContext();
@@ -48,6 +49,7 @@ export default function AddChapters() {
     });
     await Promise.all(promises);
     alert("Chapters Created/Updated");
+    requestUpdateRawData();
   }
 
   return html`

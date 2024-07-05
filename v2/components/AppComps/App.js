@@ -4,6 +4,7 @@ import usePb from "../../hooks/usePb.js";
 import usePbData from "../../hooks/usePbData.js";
 import { html, useEffect, useState } from "../../libs/preact.js";
 import getChaptersBySubject from "../../utils/obj-mappers/getChaptersBySubject.js";
+import getSubjectIdTitleMap from "../../utils/obj-mappers/getSubjectIdTitleMap.js";
 import { syncAuth } from "../../utils/pb-utils.js";
 import Home from "../HomeComps/Home.js";
 import Loading from "../Loading.js";
@@ -29,8 +30,18 @@ export default function App() {
     fetchData: updateRawChapters,
   } = usePbData("chapters");
 
+  function updateRawData() {
+    updateRawSubjects();
+    updateRawChapters();
+  }
+
   useEffect(() => {
     syncAuth();
+    document.addEventListener("updateRawData", updateRawData);
+
+    return () => {
+      document.removeEventListener("updateRawData", updateRawData);
+    };
   }, []);
 
   useEffect(() => {
@@ -52,7 +63,7 @@ export default function App() {
   }
 
   const chaptersBySubject = getChaptersBySubject(rawChapters, rawSubjects);
-  console.table(chaptersBySubject);
+  const subjectIdTitleMap = getSubjectIdTitleMap(rawSubjects);
 
   return html`
     <${AppContextProvider}
@@ -63,6 +74,7 @@ export default function App() {
         rawChapters,
         updateRawChapters,
         chaptersBySubject,
+        subjectIdTitleMap,
       }}
       children=${html`
         <${Home} />

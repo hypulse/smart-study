@@ -4,6 +4,8 @@ import Calendar from "../WidgetComps/Calendar.js";
 import AddSubject from "../WidgetComps/AddSubject.js";
 import AddChapters from "../WidgetComps/AddChapters.js";
 import Clock from "../WidgetComps/Clock.js";
+import SubjectsPlan from "../WidgetComps/SubjectsPlan.js";
+import NavBar from "./NavBar.js";
 
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -17,6 +19,12 @@ export default function Home() {
     {
       Comp: Calendar,
       title: "달력",
+      hidden: false,
+      pinned: false,
+    },
+    {
+      Comp: SubjectsPlan,
+      title: "과목별 공부 계획",
       hidden: false,
       pinned: false,
     },
@@ -61,20 +69,6 @@ export default function Home() {
           `
         )}
       </div>
-    </div>
-  `;
-}
-
-function NavBar({ menuOpen, setMenuOpen }) {
-  function toggleMenu() {
-    setMenuOpen((prev) => !prev);
-  }
-
-  return html`
-    <div>
-      <a className="text-4xl link link-hover" onClick=${toggleMenu}>
-        ${menuOpen ? "Menu" : "Home"}
-      </a>
     </div>
   `;
 }

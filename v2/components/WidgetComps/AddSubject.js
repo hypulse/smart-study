@@ -2,6 +2,7 @@ import { DB_PREFIX } from "../../env.js";
 import { useAppContext } from "../../hooks/useAppContext.js";
 import usePb from "../../hooks/usePb.js";
 import { html, useState } from "../../libs/preact.js";
+import requestUpdateRawData from "../../utils/requestUpdateRawData.js";
 
 export default function AddSubject() {
   const { rawSubjects } = useAppContext();
@@ -30,6 +31,7 @@ export default function AddSubject() {
       });
       alert("Subject Created");
     }
+    requestUpdateRawData();
   }
 
   return html`

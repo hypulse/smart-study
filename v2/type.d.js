@@ -58,10 +58,11 @@
 /**
  * @typedef {{
  * rawConfig: RawConfig
- * RawSubjects: RawSubject[]
+ * rawSubjects: RawSubject[]
  * updateRawSubjects: function
- * RawChapters: RawChapter[]
+ * rawChapters: RawChapter[]
  * updateRawChapters: function
  * chaptersBySubject: Record<string, NewChapter[]>
+ * subjectIdTitleMap: Record<string, string>
  * }} AppContext
  */
