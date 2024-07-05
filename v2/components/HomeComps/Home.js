@@ -1,13 +1,27 @@
 import { html, useState } from "../../libs/preact.js";
 import WidgetMenuBox from "./WIdgetMenuBox.js";
-import StudyPlanner from "../WidgetComps/StudyPlanner.js";
+import Calendar from "../WidgetComps/Calendar.js";
+import AddSubject from "../WidgetComps/AddSubject.js";
+import AddChapters from "../WidgetComps/AddChapters.js";
 
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
   const widgets = [
     {
-      Comp: StudyPlanner,
-      title: "학습 계획",
+      Comp: Calendar,
+      title: "달력",
+      hidden: false,
+      pinned: false,
+    },
+    {
+      Comp: AddSubject,
+      title: "과목 추가",
+      hidden: false,
+      pinned: false,
+    },
+    {
+      Comp: AddChapters,
+      title: "챕터 추가",
       hidden: false,
       pinned: false,
     },

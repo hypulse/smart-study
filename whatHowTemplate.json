@@ -2,27 +2,43 @@
   {
     "what": "최초 학습",
     "how": "",
-    "dayAfter": 0
+    "dayAfter": 0,
+    "done": false,
+    "doneDate": ""
   },
   {
     "what": "간단한 복습 (백지 복습)",
     "how": "",
-    "dayAfter": 1
+    "dayAfter": 1,
+    "done": false,
+    "doneDate": ""
   },
   {
     "what": "간단한 복습 (문제 풀이)",
     "how": "",
-    "dayAfter": 3
+    "dayAfter": 3,
+    "done": false,
+    "doneDate": ""
   },
-  { "what": "미니 모의고사", "how": "", "dayAfter": 7 },
+  {
+    "what": "미니 모의고사",
+    "how": "",
+    "dayAfter": 7,
+    "done": false,
+    "doneDate": ""
+  },
   {
     "what": "심화 복습 (오답 노트)",
     "how": "",
-    "dayAfter": 2
+    "dayAfter": 2,
+    "done": false,
+    "doneDate": ""
   },
   {
     "what": "기출 반복 전 마무리 학습",
     "how": "",
-    "dayAfter": 10
+    "dayAfter": 10,
+    "done": false,
+    "doneDate": ""
   }
 ]

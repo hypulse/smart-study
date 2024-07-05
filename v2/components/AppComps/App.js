@@ -17,7 +17,11 @@ export default function App() {
     "configs",
     CONFIG_RECORD_ID
   );
-  const { data: rawSubjects, ready: rawSubjectsReady } = usePbData("subjects");
+  const {
+    data: rawSubjects,
+    ready: rawSubjectsReady,
+    fetchData: updateRawSubjects,
+  } = usePbData("subjects");
   const {
     data: rawChapters,
     ready: rawChaptersReady,
@@ -48,7 +52,13 @@ export default function App() {
 
   return html`
     <${AppContextProvider}
-      value=${{}}
+      value=${{
+        rawConfig,
+        rawSubjects,
+        updateRawSubjects,
+        rawChapters,
+        updateRawChapters,
+      }}
       children=${html`
         <${Home} />
         <${Popup} />
