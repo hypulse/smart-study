@@ -31,7 +31,10 @@ export default function SubjectsPlan() {
         )}
       </div>
       <div className="grid gap-2">
-        ${chapters.map((chapter) => html`<${ChapterBox} chapter=${chapter} />`)}
+        ${chapters.map(
+          (chapter) =>
+            html`<${ChapterBox} chapter=${chapter} key=${chapter.id} />`
+        )}
       </div>
     </div>
   `;
