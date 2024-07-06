@@ -50,6 +50,14 @@ function ChapterBox(
 ) {
   const { toDos, title, id } = chapter;
   const { pb } = usePb();
+  const nextDoDate = toDos.find((toDo) => !toDo.done).expectedDoneDate;
+  const isToday = nextDoDate && nextDoDate === dayjs().format("YYYY-MM-DD");
+  const isLate = nextDoDate && nextDoDate < dayjs().format("YYYY-MM-DD");
+  const badgeToDisplay = isToday
+    ? html`<${TodyBadge} />`
+    : isLate
+    ? html`<${LateBadge} />`
+    : null;
 
   async function handleDone(index) {
     const newToDos = [...toDos];
@@ -65,7 +73,13 @@ function ChapterBox(
   return html`
     <details className="collapse bg-base-200">
       <summary className="collapse-title text-xl font-medium">
-        ${title} (${toDos.filter((toDo) => toDo.done).length}/${toDos.length})
+        <p className="flex items-center gap-2">
+          <span>
+            ${title}
+            (${toDos.filter((toDo) => toDo.done).length}/${toDos.length})
+          </span>
+          ${badgeToDisplay}
+        </p>
       </summary>
       <div className="collapse-content">
         <div className="grid gap-2">
@@ -102,11 +116,25 @@ function ToDoBox(
   const dateDisplay = dateToDisplay
     ? dayjs(dateToDisplay).format("YYYY-MM-DD")
     : "없음";
+  const isToday =
+    !done &&
+    expectedDoneDate &&
+    expectedDoneDate === dayjs().format("YYYY-MM-DD");
+  const isLate =
+    !done &&
+    expectedDoneDate &&
+    expectedDoneDate < dayjs().format("YYYY-MM-DD");
+  const badgeToDisplay = isToday
+    ? html`<${TodyBadge} />`
+    : isLate
+    ? html`<${LateBadge} />`
+    : null;
 
   return html`
     <div>
-      <h3 className="text-lg flex justify-between items-center">
-        Day ${accDayAfter}: ${what}
+      <h3 className="text-lg flex items-center gap-2">
+        ${badgeToDisplay}
+        <span>Day ${accDayAfter}: ${what}</span>
         ${done
           ? html`
               <input
@@ -133,4 +161,12 @@ function ToDoBox(
       </p>
     </div>
   `;
+}
+
+function TodyBadge() {
+  return html`<div className="badge badge-info">Today</div>`;
+}
+
+function LateBadge() {
+  return html`<div className="badge badge-warning">Late</div>`;
 }
