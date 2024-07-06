@@ -75,7 +75,7 @@ function ChapterBox(
       <summary className="collapse-title text-xl font-medium">
         <p className="flex items-center gap-2">
           <span>
-            ${title}
+            ${title}${" "}
             (${toDos.filter((toDo) => toDo.done).length}/${toDos.length})
           </span>
           ${badgeToDisplay}
