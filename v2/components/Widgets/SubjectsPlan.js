@@ -69,14 +69,19 @@ function ChapterBox(
       </summary>
       <div className="collapse-content">
         <div className="grid gap-2">
-          ${toDos.map(
-            (toDo, index) => html`
+          ${toDos.map((toDo, index) => {
+            const accDayAfter = toDos.slice(0, index + 1).reduce((acc, cur) => {
+              return Number(acc) + Number(cur.dayAfter || 0);
+            }, 0);
+
+            return html`
               <${ToDoBox}
                 toDo=${toDo}
+                accDayAfter=${accDayAfter}
                 handleDone=${handleDone.bind(null, index)}
               />
-            `
-          )}
+            `;
+          })}
         </div>
       </div>
     </details>
@@ -90,7 +95,7 @@ function ToDoBox(
    * handleDone: function
    * }}
    */
-  { toDo, handleDone }
+  { toDo, handleDone, accDayAfter }
 ) {
   const { what, how, done, doneDate, expectedDoneDate } = toDo;
   const dateToDisplay = done ? doneDate : expectedDoneDate;
@@ -101,7 +106,7 @@ function ToDoBox(
   return html`
     <div>
       <h3 className="text-lg flex justify-between items-center">
-        ${what}
+        Day ${accDayAfter}: ${what}
         ${done
           ? html`
               <input
