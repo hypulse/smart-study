@@ -68,7 +68,7 @@ export default function AddChapters() {
 
   return html`
     <div className="grid gap-2">
-      <div className="join">
+      <div className="join flex-wrap">
         ${rawSubjects.map(
           (subject) => html`
             <button

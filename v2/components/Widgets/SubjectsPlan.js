@@ -14,7 +14,7 @@ export default function SubjectsPlan() {
 
   return html`
     <div className="grid gap-2">
-      <div className="join">
+      <div className="join flex-wrap">
         ${subjects.map(
           (subject) => html`
             <button
