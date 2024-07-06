@@ -1,4 +1,5 @@
 import { html } from "../../libs/preact.js";
+import requestUpdateRawData from "../../utils/requestUpdateRawData.js";
 
 export default function NavBar({ menuOpen, setMenuOpen }) {
   function toggleMenu() {
@@ -10,7 +11,10 @@ export default function NavBar({ menuOpen, setMenuOpen }) {
       <a className="text-4xl link link-hover" onClick=${toggleMenu}>
         ${menuOpen ? "Menu" : "Home"}
       </a>
-      <button className="btn btn-primary btn-square">
+      <button
+        className="btn btn-primary btn-square"
+        onClick=${requestUpdateRawData}
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           height="24"
