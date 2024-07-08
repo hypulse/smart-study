@@ -1,21 +1,17 @@
 import { html } from "../../libs/preact.js";
 
 export default function MenuWidgetBox({ widget, openFullScreen }) {
-  const { title, hidden, pinned, Comp } = widget;
+  const { title, hidden, Comp } = widget;
 
   function openComp() {
     openFullScreen(Comp);
   }
 
   return html`
-    <div
-      className="grid gap-4 hover:opacity-100 p-2 ${hidden
-        ? "opacity-50"
-        : "opacity-100"}"
-    >
+    <div className="grid gap-4 hover:opacity-100 p-2">
       <div className="flex gap-2">
         <${FullScreenButton} openComp=${openComp} />
-        <${PinButton} pinned=${pinned} />
+        <${PinButton} hidden=${hidden} />
       </div>
       <h3 className="text-4xl">${title}</h3>
     </div>
@@ -41,12 +37,12 @@ function FullScreenButton({ openComp }) {
   `;
 }
 
-function PinButton({ pinned }) {
+function PinButton({ hidden }) {
   return html`
     <button
-      className="btn btn-primary btn-square btn-sm ${pinned
-        ? "opacity-100"
-        : "opacity-50"}"
+      className="btn btn-primary btn-square btn-sm ${hidden
+        ? "opacity-50"
+        : "opacity-100"}"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"

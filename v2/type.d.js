@@ -72,6 +72,26 @@
  * rawSubjects: RawSubject[]
  * rawChapters: RawChapter[]
  * chaptersBySubject: Record<string, NewChapter[]>
- * calendarEvents: CalendarEvent[]
+ * calendarStudyEvents: (CalendarEvent&{allDay:true})[]
+ * calendarRoutineEvents: CalendarEvent[]
  * }} AppContext
+ */
+
+/**
+ * @typedef {Object} RawRoutine
+ * @property {string} title - title of the routine
+ * @property {string} start - "HH:MM"
+ * @property {string} end - "HH:MM"
+ * @property {string} description - description of the routine
+ * @property {Array<string>} repeat - ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"]
+ */
+
+/**
+ * @typedef {Object} RawUserRoutine
+ * @property {string} title - title of the routine
+ * @property {string} start - "HH:MM"
+ * @property {string} end - "HH:MM"
+ * @property {string} description - description of the routine
+ * @property {string} date - "YYYY-MM-DD"
+ * @property {boolean} done - true if the routine is done
  */

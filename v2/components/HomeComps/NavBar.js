@@ -1,16 +1,30 @@
 import { html } from "../../libs/preact.js";
 import requestUpdateRawData from "../../utils/requestUpdateRawData.js";
 
-export default function NavBar({ menuOpen, setMenuOpen }) {
-  function toggleMenu() {
-    setMenuOpen((prev) => !prev);
-  }
+export default function NavBar({ page, setPage }) {
+  const pages = [
+    {
+      title: "Home",
+      page: "home",
+    },
+    {
+      title: "Menu",
+      page: "menu",
+    },
+  ];
 
   return html`
-    <div className="flex justify-between items-center">
-      <a className="text-4xl link link-hover" onClick=${toggleMenu}>
-        ${menuOpen ? "Menu" : "Home"}
-      </a>
+    <div className="flex gap-4 items-center">
+      ${pages.map(
+        (p) => html`
+          <a
+            className="text-4xl link link-hover"
+            onClick=${() => setPage(p.page)}
+          >
+            ${p.title}
+          </a>
+        `
+      )}
       <button
         className="btn btn-primary btn-square"
         onClick=${requestUpdateRawData}

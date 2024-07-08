@@ -11,6 +11,7 @@ import EnterCred from "./EnterCred.js";
 import EnterDataInfo from "./EnterDataInfo.js";
 import Popup from "./Popup.js";
 import getCalendarEventsOfChapters from "../../utils/obj-mappers/getCalendarEventsOfChapters.js";
+import getCalendarEventsOfRoutines from "../../utils/obj-mappers/getCalendarEventsOfRoutines.js";
 
 export default function App() {
   const { authenticated } = usePb();
@@ -29,10 +30,19 @@ export default function App() {
     ready: rawChaptersReady,
     fetchData: updateRawChapters,
   } = usePbData("chapters");
+  const { data: rawRoutines, ready: rawRoutinesReady } = usePbData("routines");
+  const {
+    data: rawUserRoutines,
+    ready: rawUserRoutinesReady,
+    fetchData: updateRawUserRoutines,
+  } = usePbData("user_routines", null, {
+    filter: `date = '${dayjs().format("YYYY-MM-DD")}'`,
+  });
 
   function updateRawData() {
     updateRawSubjects();
     updateRawChapters();
+    updateRawUserRoutines();
   }
 
   useEffect(() => {
@@ -45,10 +55,22 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    if (rawConfigReady && rawSubjectsReady && rawChaptersReady) {
+    if (
+      rawConfigReady &&
+      rawSubjectsReady &&
+      rawChaptersReady &&
+      rawRoutinesReady &&
+      rawUserRoutinesReady
+    ) {
       setDataReady(true);
     }
-  }, [rawConfigReady, rawSubjectsReady, rawChaptersReady]);
+  }, [
+    rawConfigReady,
+    rawSubjectsReady,
+    rawChaptersReady,
+    rawRoutinesReady,
+    rawUserRoutinesReady,
+  ]);
 
   if (!PB_URL || !CONFIG_RECORD_ID) {
     return html`<${EnterDataInfo} />`;
@@ -63,13 +85,14 @@ export default function App() {
   }
 
   const chaptersBySubject = getChaptersBySubject(rawChapters, rawSubjects);
-  const calendarEvents = (() => {
-    const calendarEventsOfChapters = getCalendarEventsOfChapters(
-      chaptersBySubject,
-      rawSubjects
-    );
-    return [...calendarEventsOfChapters];
-  })();
+  const calendarStudyEvents = getCalendarEventsOfChapters(
+    chaptersBySubject,
+    rawSubjects
+  );
+  const calendarRoutineEvents = getCalendarEventsOfRoutines(
+    rawRoutines,
+    rawUserRoutines
+  );
 
   return html`
     <${AppContextProvider}
@@ -78,7 +101,8 @@ export default function App() {
         rawSubjects,
         rawChapters,
         chaptersBySubject,
-        calendarEvents,
+        calendarStudyEvents,
+        calendarRoutineEvents,
       }}
       children=${html`
         <${Home} />

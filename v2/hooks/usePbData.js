@@ -2,7 +2,7 @@ import { DB_PREFIX } from "../env.js";
 import { useEffect, useState } from "../libs/preact.js";
 import usePb from "./usePb.js";
 
-export default function usePbData(collectionId, recordId, autoFetch = true) {
+export default function usePbData(collectionId, recordId) {
   collectionId = `${DB_PREFIX}_${collectionId}`;
   const { pb, authenticated } = usePb();
   const isGetOne = !!recordId;
@@ -40,9 +40,7 @@ export default function usePbData(collectionId, recordId, autoFetch = true) {
       return;
     }
 
-    if (autoFetch) {
-      fetchData();
-    }
+    fetchData();
   }, [authenticated]);
 
   return {

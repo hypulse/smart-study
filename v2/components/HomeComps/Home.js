@@ -1,5 +1,4 @@
 import { html, useState } from "../../libs/preact.js";
-import Calendar from "../Widgets/Calendar.js";
 import AddSubject from "../Widgets/AddSubject.js";
 import AddChapters from "../Widgets/AddChapters.js";
 import Clock from "../Widgets/Clock.js";
@@ -7,10 +6,12 @@ import SubjectsPlan from "../Widgets/SubjectsPlan.js";
 import NavBar from "./NavBar.js";
 import MenuWidgetBox from "./MenuWidgetBox.js";
 import useFullScreen from "./useFullScreen.js";
+import StudyCalendar from "../Widgets/StudyCalendar.js";
+import DayCalendar from "../Widgets/DayCalendar.js";
 
 export default function Home() {
   const { FullScreen, openFullScreen } = useFullScreen();
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [page, setPage] = useState("home");
   const widgets = [
     {
       Comp: Clock,
@@ -19,8 +20,14 @@ export default function Home() {
       pinned: false,
     },
     {
-      Comp: Calendar,
-      title: "달력",
+      Comp: StudyCalendar,
+      title: "학습 달력",
+      hidden: false,
+      pinned: false,
+    },
+    {
+      Comp: DayCalendar,
+      title: "일일 달력",
       hidden: false,
       pinned: false,
     },
@@ -45,20 +52,16 @@ export default function Home() {
   ];
 
   return html`
-    <${NavBar} menuOpen=${menuOpen} setMenuOpen=${setMenuOpen} />
-    <${Main}
-      menuOpen=${menuOpen}
-      widgets=${widgets}
-      openFullScreen=${openFullScreen}
-    />
+    <${NavBar} page=${page} setPage=${setPage} />
+    <${Main} page=${page} widgets=${widgets} openFullScreen=${openFullScreen} />
     <${FullScreen} />
   `;
 }
 
-function Main({ menuOpen, widgets, openFullScreen }) {
+function Main({ page, widgets, openFullScreen }) {
   const activeWidgets = widgets.filter((widget) => !widget.hidden);
 
-  if (menuOpen) {
+  if (page === "menu") {
     return html`
       <div className="grid grid-cols-4 gap-4">
         ${widgets.map(

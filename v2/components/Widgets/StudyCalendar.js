@@ -2,9 +2,9 @@ import { useAppContext } from "../../hooks/useAppContext.js";
 import { html, useEffect, useRef } from "../../libs/preact.js";
 import showModal from "../../utils/showModal.js";
 
-export default function Calendar() {
+export default function StudyCalendar() {
   const ref = useRef();
-  const { calendarEvents } = useAppContext();
+  const { calendarStudyEvents } = useAppContext();
 
   useEffect(() => {
     if (!ref.current || !window.FullCalendar) {
@@ -13,10 +13,10 @@ export default function Calendar() {
 
     const calendar = new FullCalendar.Calendar(ref.current, {
       initialView: "dayGridMonth",
-      events: calendarEvents,
+      events: calendarStudyEvents,
       editable: false,
       headerToolbar: {
-        center: "dayGridMonth,timeGridWeek,timeGridDay",
+        center: "dayGridMonth",
       },
       eventClick: function (data) {
         showModal(data.event.extendedProps.description, data.event.title);
@@ -28,7 +28,7 @@ export default function Calendar() {
     return () => {
       calendar.destroy();
     };
-  }, [calendarEvents]);
+  }, [calendarStudyEvents]);
 
   return html`<div ref=${ref} />`;
 }
