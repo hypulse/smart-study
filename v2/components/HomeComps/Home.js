@@ -64,15 +64,15 @@ export default function Home() {
   const pages = [
     {
       title: "Routine",
-      widgets: ["RoutineCalendar", "RoutinesToDo"],
+      widgets: ["RoutineCalendar", "AddTask", "RoutinesToDo"],
     },
     {
       title: "Study",
-      widgets: ["StudyCalendar", "StudyPlans"],
+      widgets: ["StudyCalendar", "StudyCycle", "StudyPlans"],
     },
     {
       title: "Others",
-      widgets: ["AddTask", "StudyCycle"],
+      widgets: [],
     },
     { title: "Menu", widgets: ["Menu"] },
   ];
