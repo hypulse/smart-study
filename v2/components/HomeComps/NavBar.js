@@ -11,6 +11,18 @@ export default function NavBar({ page, setPage }) {
       title: "Menu",
       page: "menu",
     },
+    {
+      title: "Study",
+      page: "menu",
+    },
+    {
+      title: "Routine",
+      page: "menu",
+    },
+    {
+      title: "Others",
+      page: "menu",
+    },
   ];
 
   return html`

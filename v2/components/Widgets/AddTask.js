@@ -10,7 +10,7 @@ export default function AddTask() {
   const tasks = rawConfig.tasks;
   const subjects = rawSubjects.map((subject) => subject.title);
   const [task, setTask] = useState(null);
-  const [timeType, setTimeType] = useState("40+10");
+  const [timeType, setTimeType] = useState(null);
 
   const addTask = async () => {
     const start = dayjs().format("HH:mm");
@@ -36,6 +36,8 @@ export default function AddTask() {
       await pb.collection(`${DB_PREFIX}_user_routines`).create(data);
     }
     alert("Task Added");
+    setTask(null);
+    setTimeType(null);
     requestUpdateRawData();
   };
 
@@ -75,7 +77,7 @@ function TimeTypes({ setTimeType }) {
   return html`
     <div className="grid grid-cols-3 gap-x-4">
       ${timeTypes.map(
-        (timeType, index) => html`
+        (timeType) => html`
           <div className="form-control" key=${timeType}>
             <label className="label cursor-pointer">
               <span className="label-text">${timeType}분</span>
@@ -85,7 +87,6 @@ function TimeTypes({ setTimeType }) {
                 className="radio"
                 value=${timeType}
                 onChange=${() => setTimeType(timeType)}
-                defaultChecked=${index === 0}
               />
             </label>
           </div>

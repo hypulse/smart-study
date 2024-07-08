@@ -15,62 +15,53 @@ import StudyCycle from "../Widgets/StudyCycle.js";
 export default function Home() {
   const { FullScreen, openFullScreen } = useFullScreen();
   const [page, setPage] = useState("home");
-  const widgets = [
+  const [widgets, setWidgets] = useState([
     {
       Comp: RoutineCalendar,
       title: "일일 달력",
-      hidden: false,
-      pinned: false,
+      hidden: true,
     },
     {
       Comp: AddTask,
       title: "할 일 추가",
-      hidden: false,
-      pinned: false,
+      hidden: true,
     },
     {
       Comp: RoutinesToDo,
       title: "할 일 목록",
-      hidden: false,
-      pinned: false,
+      hidden: true,
     },
     {
       Comp: StudyCalendar,
       title: "학습 달력",
-      hidden: false,
-      pinned: false,
+      hidden: true,
     },
     {
       Comp: StudyCycle,
       title: "학습 주기",
-      hidden: false,
-      pinned: false,
+      hidden: true,
     },
     {
       Comp: StudyPlans,
       title: "과목별 공부 계획",
-      hidden: false,
-      pinned: false,
+      hidden: true,
     },
     {
       Comp: AddSubject,
       title: "과목 추가",
       hidden: true,
-      pinned: false,
     },
     {
       Comp: AddChapters,
       title: "챕터 추가",
       hidden: true,
-      pinned: false,
     },
     {
       Comp: Clock,
       title: "시계",
       hidden: true,
-      pinned: false,
     },
-  ];
+  ]);
 
   return html`
     <${NavBar} page=${page} setPage=${setPage} />
