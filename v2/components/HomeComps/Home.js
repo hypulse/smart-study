@@ -68,11 +68,11 @@ export default function Home() {
     },
     {
       title: "Study",
-      widgets: ["StudyCalendar", "StudyCycle", "StudyPlans"],
+      widgets: ["StudyCalendar", "StudyPlans"],
     },
     {
       title: "Others",
-      widgets: [],
+      widgets: ["StudyCycle"],
     },
     { title: "Menu", widgets: ["Menu"] },
   ];
