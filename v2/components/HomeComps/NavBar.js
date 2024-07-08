@@ -1,5 +1,6 @@
 import { html } from "../../libs/preact.js";
 import requestUpdateRawData from "../../utils/requestUpdateRawData.js";
+import Clock from "./Clock.js";
 
 export default function NavBar({ pages, applyWidgets }) {
   return html`
@@ -31,6 +32,7 @@ export default function NavBar({ pages, applyWidgets }) {
           />
         </svg>
       </button>
+      <${Clock} />
     </div>
   `;
 }
