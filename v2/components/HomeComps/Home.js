@@ -2,22 +2,34 @@ import { html, useState } from "../../libs/preact.js";
 import AddSubject from "../Widgets/AddSubject.js";
 import AddChapters from "../Widgets/AddChapters.js";
 import Clock from "../Widgets/Clock.js";
-import SubjectsPlan from "../Widgets/SubjectsPlan.js";
 import NavBar from "./NavBar.js";
 import MenuWidgetBox from "./MenuWidgetBox.js";
 import useFullScreen from "./useFullScreen.js";
 import StudyCalendar from "../Widgets/StudyCalendar.js";
-import DayCalendar from "../Widgets/DayCalendar.js";
-import DayToDos from "../Widgets/DayToDos.js";
-import AddToDo from "../Widgets/AddToDo.js";
+import StudyPlans from "../Widgets/StudyPlans.js";
+import RoutineCalendar from "../Widgets/RoutineCalendar.js";
+import AddTask from "../Widgets/AddTask.js";
+import RoutinesToDo from "../Widgets/RoutinesToDo.js";
 
 export default function Home() {
   const { FullScreen, openFullScreen } = useFullScreen();
   const [page, setPage] = useState("home");
   const widgets = [
     {
-      Comp: Clock,
-      title: "시계",
+      Comp: RoutineCalendar,
+      title: "일일 달력",
+      hidden: false,
+      pinned: false,
+    },
+    {
+      Comp: AddTask,
+      title: "할 일 추가",
+      hidden: false,
+      pinned: false,
+    },
+    {
+      Comp: RoutinesToDo,
+      title: "할 일 목록",
       hidden: false,
       pinned: false,
     },
@@ -28,25 +40,7 @@ export default function Home() {
       pinned: false,
     },
     {
-      Comp: AddToDo,
-      title: "할 일 추가",
-      hidden: false,
-      pinned: false,
-    },
-    {
-      Comp: DayCalendar,
-      title: "일일 달력",
-      hidden: false,
-      pinned: false,
-    },
-    {
-      Comp: DayToDos,
-      title: "오늘 할 일",
-      hidden: false,
-      pinned: false,
-    },
-    {
-      Comp: SubjectsPlan,
+      Comp: StudyPlans,
       title: "과목별 공부 계획",
       hidden: false,
       pinned: false,
@@ -60,6 +54,12 @@ export default function Home() {
     {
       Comp: AddChapters,
       title: "챕터 추가",
+      hidden: true,
+      pinned: false,
+    },
+    {
+      Comp: Clock,
+      title: "시계",
       hidden: true,
       pinned: false,
     },

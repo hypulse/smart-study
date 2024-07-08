@@ -36,7 +36,7 @@
 /**
  * @typedef {{
  * toDosExample: ToDoTypeA[]
- * dayToDos: string[]
+ * tasks: string[]
  * }} RawConfig
  */
 
@@ -94,6 +94,6 @@
  * chaptersBySubject: Record<string, NewChapter[]>
  * calendarStudyEvents: (CalendarEvent&{allDay:true})[]
  * calendarRoutineEvents: CalendarEvent[]
- * dayToDos: (RawUserRoutine&DbFields)[]
+ * routinesToDo: (RawUserRoutine&DbFields)[]
  * }} AppContext
  */

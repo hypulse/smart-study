@@ -2,7 +2,7 @@ import { useAppContext } from "../../hooks/useAppContext.js";
 import { html, useEffect, useRef } from "../../libs/preact.js";
 import showModal from "../../utils/showModal.js";
 
-export default function DayCalendar() {
+export default function RoutineCalendar() {
   const { calendarRoutineEvents } = useAppContext();
   const ref = useRef();
 
@@ -13,6 +13,7 @@ export default function DayCalendar() {
 
     const calendar = new FullCalendar.Calendar(ref.current, {
       initialView: "timeGridDay",
+      contentHeight: "auto",
       events: calendarRoutineEvents,
       editable: false,
       headerToolbar: {
@@ -32,7 +33,7 @@ export default function DayCalendar() {
     return () => {
       calendar.destroy();
     };
-  }, []);
+  }, [calendarRoutineEvents]);
 
   return html`<div ref=${ref} />`;
 }

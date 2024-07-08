@@ -13,6 +13,7 @@ export default function StudyCalendar() {
 
     const calendar = new FullCalendar.Calendar(ref.current, {
       initialView: "dayGridMonth",
+      contentHeight: "auto",
       events: calendarStudyEvents,
       editable: false,
       headerToolbar: {

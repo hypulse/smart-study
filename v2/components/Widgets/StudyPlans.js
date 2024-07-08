@@ -5,7 +5,7 @@ import { html, useState } from "../../libs/preact.js";
 import getSubjectIdTitleMap from "../../utils/obj-mappers/getSubjectIdTitleMap.js";
 import requestUpdateRawData from "../../utils/requestUpdateRawData.js";
 
-export default function SubjectsPlan() {
+export default function StudyPlans() {
   const { chaptersBySubject, rawSubjects } = useAppContext();
   const subjects = Object.keys(chaptersBySubject);
   const [selectedSubjectId, setSelectedSubjectId] = useState(subjects[0]);
