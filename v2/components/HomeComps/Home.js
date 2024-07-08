@@ -1,7 +1,6 @@
 import { html, useEffect, useState } from "../../libs/preact.js";
 import AddSubject from "../Widgets/AddSubject.js";
 import AddChapters from "../Widgets/AddChapters.js";
-import Clock from "../Widgets/Clock.js";
 import NavBar from "./NavBar.js";
 import useFullScreen from "./useFullScreen.js";
 import StudyCalendar from "../Widgets/StudyCalendar.js";
@@ -54,11 +53,6 @@ export default function Home() {
     {
       Comp: AddChapters,
       title: "챕터 추가",
-      hidden: true,
-    },
-    {
-      Comp: Clock,
-      title: "시계",
       hidden: true,
     },
     {
