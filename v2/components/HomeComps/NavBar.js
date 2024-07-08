@@ -1,37 +1,14 @@
 import { html } from "../../libs/preact.js";
 import requestUpdateRawData from "../../utils/requestUpdateRawData.js";
 
-export default function NavBar({ page, setPage }) {
-  const pages = [
-    {
-      title: "Home",
-      page: "home",
-    },
-    {
-      title: "Menu",
-      page: "menu",
-    },
-    {
-      title: "Study",
-      page: "menu",
-    },
-    {
-      title: "Routine",
-      page: "menu",
-    },
-    {
-      title: "Others",
-      page: "menu",
-    },
-  ];
-
+export default function NavBar({ pages, applyWidgets }) {
   return html`
     <div className="flex gap-4 items-center">
       ${pages.map(
         (p) => html`
           <a
             className="text-4xl link link-hover"
-            onClick=${() => setPage(p.page)}
+            onClick=${() => applyWidgets(p.widgets)}
           >
             ${p.title}
           </a>

@@ -54,15 +54,19 @@ function RoutinesToDoCard(
     requestUpdateRawData();
   }
 
+  function getLeftTime() {
+    const diff = dayjs()
+      .set("hour", end.split(":")[0])
+      .set("minute", end.split(":")[1])
+      .set("second", 0)
+      .diff(dayjs(), "millisecond");
+    return dayjs(diff).format("mm분 ss초 남음");
+  }
+
   useEffect(() => {
     if (!ref.current) return;
     const interval = setInterval(() => {
-      const diff = dayjs()
-        .set("hour", end.split(":")[0])
-        .set("minute", end.split(":")[1])
-        .set("second", 0)
-        .diff(dayjs(), "millisecond");
-      ref.current.innerText = dayjs(diff).format("mm분 ss초 남음");
+      ref.current.textContent = getLeftTime();
     }, 1000);
     return () => clearInterval(interval);
   }, []);
@@ -83,7 +87,9 @@ function RoutinesToDoCard(
           />
         </svg>
       </button>
-      <h2 className="text-lg">${title} (<span ref=${ref}></span>)</h2>
+      <h2 className="text-lg">
+        ${title} (<span ref=${ref}>${getLeftTime()}</span>)
+      </h2>
       <p>${startDisplay} - ${endDisplay}</p>
       <div className="card-actions justify-end">
         <button className="btn btn-primary" onClick=${handleComplete}>

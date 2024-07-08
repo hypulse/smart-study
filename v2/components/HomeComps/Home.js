@@ -1,9 +1,8 @@
-import { html, useState } from "../../libs/preact.js";
+import { html, useEffect, useState } from "../../libs/preact.js";
 import AddSubject from "../Widgets/AddSubject.js";
 import AddChapters from "../Widgets/AddChapters.js";
 import Clock from "../Widgets/Clock.js";
 import NavBar from "./NavBar.js";
-import MenuWidgetBox from "./MenuWidgetBox.js";
 import useFullScreen from "./useFullScreen.js";
 import StudyCalendar from "../Widgets/StudyCalendar.js";
 import StudyPlans from "../Widgets/StudyPlans.js";
@@ -11,10 +10,11 @@ import RoutineCalendar from "../Widgets/RoutineCalendar.js";
 import AddTask from "../Widgets/AddTask.js";
 import RoutinesToDo from "../Widgets/RoutinesToDo.js";
 import StudyCycle from "../Widgets/StudyCycle.js";
+import Menu from "../Widgets/Menu.js";
 
 export default function Home() {
+  // TODO - Add Home Context
   const { FullScreen, openFullScreen } = useFullScreen();
-  const [page, setPage] = useState("home");
   const [widgets, setWidgets] = useState([
     {
       Comp: RoutineCalendar,
@@ -61,35 +61,53 @@ export default function Home() {
       title: "시계",
       hidden: true,
     },
+    {
+      Comp: Menu,
+      title: "메뉴",
+      hidden: true,
+    },
   ]);
-
-  return html`
-    <${NavBar} page=${page} setPage=${setPage} />
-    <${Main} page=${page} widgets=${widgets} openFullScreen=${openFullScreen} />
-    <${FullScreen} />
-  `;
-}
-
-function Main({ page, widgets, openFullScreen }) {
+  const pages = [
+    {
+      title: "Routine",
+      widgets: ["RoutineCalendar", "RoutinesToDo"],
+    },
+    {
+      title: "Study",
+      widgets: ["StudyCalendar", "StudyPlans"],
+    },
+    {
+      title: "Others",
+      widgets: ["AddTask", "StudyCycle"],
+    },
+    { title: "Menu", widgets: ["Menu"] },
+  ];
   const activeWidgets = widgets.filter((widget) => !widget.hidden);
 
-  if (page === "menu") {
-    return html`
-      <div className="grid grid-cols-4 gap-4">
-        ${widgets.map(
-          (widget) =>
-            html`
-              <${MenuWidgetBox}
-                widget=${widget}
-                openFullScreen=${openFullScreen}
-              />
-            `
-        )}
-      </div>
-    `;
-  }
+  const applyWidgets = (widgets) => {
+    setWidgets((prev) => {
+      prev.sort((a, b) => {
+        const aIndex = widgets.indexOf(a.Comp.name);
+        const bIndex = widgets.indexOf(b.Comp.name);
+        return aIndex - bIndex;
+      });
+      return prev.map((widget) => {
+        if (widgets.includes(widget.Comp.name)) {
+          widget.hidden = false;
+        } else {
+          widget.hidden = true;
+        }
+        return widget;
+      });
+    });
+  };
+
+  useEffect(() => {
+    applyWidgets(pages[0].widgets);
+  }, []);
 
   return html`
+    <${NavBar} pages=${pages} applyWidgets=${applyWidgets} />
     <div className="flex flex-col flex-wrap max-h-screen">
       ${activeWidgets.map(
         ({ Comp, title }) => html`
@@ -99,5 +117,6 @@ function Main({ page, widgets, openFullScreen }) {
         `
       )}
     </div>
+    <${FullScreen} />
   `;
 }
