@@ -60,6 +60,7 @@ function RoutinesToDoCard(
       .set("minute", end.split(":")[1])
       .set("second", 0)
       .diff(dayjs(), "millisecond");
+    if (diff < 0) return "00분 00초 남음";
     return dayjs(diff).format("mm분 ss초 남음");
   }
 
