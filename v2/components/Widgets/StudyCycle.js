@@ -1,7 +1,7 @@
 import { CONFIG_RECORD_ID, DB_PREFIX } from "../../env.js";
 import { useAppContext } from "../../hooks/useAppContext.js";
 import usePb from "../../hooks/usePb.js";
-import { html } from "../../libs/preact.js";
+import { html, useState } from "../../libs/preact.js";
 import requestUpdateRawData from "../../utils/requestUpdateRawData.js";
 
 export default function StudyCycle() {
@@ -11,6 +11,9 @@ export default function StudyCycle() {
   const studyCycleStart = rawConfig.studyCycle.start;
   const dayFromStart = dayjs().diff(dayjs(studyCycleStart), "day");
   const allDone = studyCycle.every((step) => step.done);
+  const [stepDescriptions, setStepDescriptions] = useState(
+    studyCycle.map((step) => step.description || "")
+  );
 
   const handleClick = async () => {
     const lastStep = studyCycle.findIndex((step) => !step.done);
@@ -37,9 +40,10 @@ export default function StudyCycle() {
     await pb.collection(`${DB_PREFIX}_configs`).update(CONFIG_RECORD_ID, {
       studyCycle: {
         ...rawConfig.studyCycle,
-        data: rawConfig.studyCycle.data.map((step) => ({
+        data: rawConfig.studyCycle.data.map((step, index) => ({
           ...step,
           done: false,
+          description: stepDescriptions[index],
         })),
         start: dayjs().format("YYYY-MM-DD"),
       },
@@ -64,6 +68,29 @@ export default function StudyCycle() {
             `
         )}
       </ul>
+      ${allDone
+        ? html`
+            <div className="grid gap-2">
+              ${studyCycle.map(
+                (step, index) => html`
+                  <input
+                    type="text"
+                    placeholder="${index + 1}. ${step.title}"
+                    className="input input-sm input-bordered"
+                    value=${stepDescriptions[index]}
+                    onChange=${(e) => {
+                      const newStepDescriptions = [...stepDescriptions];
+                      newStepDescriptions[index] = e.target.value;
+                      setStepDescriptions(newStepDescriptions);
+                    }}
+                  />
+                `
+              )}
+            </div>
+          `
+        : html`
+            <p>${studyCycle.find((step) => !step.done).description || ""}</p>
+          `}
       ${allDone
         ? html`
             <button className="btn btn-primary" onClick=${handleReset}>
