@@ -60,13 +60,15 @@ function ChapterBox(
     : null;
 
   async function handleDone(index) {
+    const answer = confirm("Are you sure you want to mark this as done?");
+    if (!answer) return;
     const newToDos = [...toDos];
     newToDos[index].done = true;
     newToDos[index].doneDate = dayjs().format("YYYY-MM-DD");
     await pb.collection(`${DB_PREFIX}_chapters`).update(id, {
       toDos: newToDos,
     });
-    alert("Done");
+    alert("Marked as done!");
     requestUpdateRawData();
   }
 

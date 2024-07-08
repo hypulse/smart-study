@@ -93,6 +93,7 @@ export default function App() {
     rawRoutines,
     rawUserRoutines
   );
+  const dayToDos = rawUserRoutines.filter(({ done }) => !done);
 
   return html`
     <${AppContextProvider}
@@ -103,6 +104,7 @@ export default function App() {
         chaptersBySubject,
         calendarStudyEvents,
         calendarRoutineEvents,
+        dayToDos,
       }}
       children=${html`
         <${Home} />

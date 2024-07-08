@@ -8,6 +8,8 @@ import MenuWidgetBox from "./MenuWidgetBox.js";
 import useFullScreen from "./useFullScreen.js";
 import StudyCalendar from "../Widgets/StudyCalendar.js";
 import DayCalendar from "../Widgets/DayCalendar.js";
+import DayToDos from "../Widgets/DayToDos.js";
+import AddToDo from "../Widgets/AddToDo.js";
 
 export default function Home() {
   const { FullScreen, openFullScreen } = useFullScreen();
@@ -26,8 +28,20 @@ export default function Home() {
       pinned: false,
     },
     {
+      Comp: AddToDo,
+      title: "할 일 추가",
+      hidden: false,
+      pinned: false,
+    },
+    {
       Comp: DayCalendar,
       title: "일일 달력",
+      hidden: false,
+      pinned: false,
+    },
+    {
+      Comp: DayToDos,
+      title: "오늘 할 일",
       hidden: false,
       pinned: false,
     },

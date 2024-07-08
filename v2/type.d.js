@@ -36,6 +36,7 @@
 /**
  * @typedef {{
  * toDosExample: ToDoTypeA[]
+ * dayToDos: string[]
  * }} RawConfig
  */
 
@@ -67,17 +68,6 @@
  */
 
 /**
- * @typedef {{
- * rawConfig: RawConfig
- * rawSubjects: RawSubject[]
- * rawChapters: RawChapter[]
- * chaptersBySubject: Record<string, NewChapter[]>
- * calendarStudyEvents: (CalendarEvent&{allDay:true})[]
- * calendarRoutineEvents: CalendarEvent[]
- * }} AppContext
- */
-
-/**
  * @typedef {Object} RawRoutine
  * @property {string} title - title of the routine
  * @property {string} start - "HH:MM"
@@ -94,4 +84,16 @@
  * @property {string} description - description of the routine
  * @property {string} date - "YYYY-MM-DD"
  * @property {boolean} done - true if the routine is done
+ */
+
+/**
+ * @typedef {{
+ * rawConfig: RawConfig
+ * rawSubjects: RawSubject[]
+ * rawChapters: RawChapter[]
+ * chaptersBySubject: Record<string, NewChapter[]>
+ * calendarStudyEvents: (CalendarEvent&{allDay:true})[]
+ * calendarRoutineEvents: CalendarEvent[]
+ * dayToDos: (RawUserRoutine&DbFields)[]
+ * }} AppContext
  */
