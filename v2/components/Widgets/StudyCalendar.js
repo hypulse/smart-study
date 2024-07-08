@@ -26,10 +26,18 @@ export default function StudyCalendar() {
 
     calendar.render();
 
+    const parent = ref.current.parentElement;
+    const week = Math.floor(dayjs().date() / 7);
+    parent.scrollTop = (parent.scrollHeight / 5) * week;
+
     return () => {
       calendar.destroy();
     };
   }, [calendarStudyEvents]);
 
-  return html`<div ref=${ref} />`;
+  return html`
+    <div style="height: 90vh; overflow-y: auto;">
+      <div ref=${ref} />
+    </div>
+  `;
 }

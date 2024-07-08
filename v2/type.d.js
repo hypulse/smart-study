@@ -37,6 +37,10 @@
  * @typedef {{
  * toDosExample: ToDoTypeA[]
  * tasks: string[]
+ * studyCycle: {
+ * data: {title: string, done: boolean}[]
+ * start: string
+ * }
  * }} RawConfig
  */
 

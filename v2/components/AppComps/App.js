@@ -16,10 +16,11 @@ import getCalendarEventsOfRoutines from "../../utils/obj-mappers/getCalendarEven
 export default function App() {
   const { authenticated } = usePb();
   const [dataReady, setDataReady] = useState(false);
-  const { data: rawConfig, ready: rawConfigReady } = usePbData(
-    "configs",
-    CONFIG_RECORD_ID
-  );
+  const {
+    data: rawConfig,
+    ready: rawConfigReady,
+    fetchData: updateRawConfig,
+  } = usePbData("configs", CONFIG_RECORD_ID);
   const {
     data: rawSubjects,
     ready: rawSubjectsReady,
@@ -39,10 +40,21 @@ export default function App() {
     filter: `date = '${dayjs().format("YYYY-MM-DD")}'`,
   });
 
-  function updateRawData() {
-    updateRawSubjects();
-    updateRawChapters();
-    updateRawUserRoutines();
+  function updateRawData(e) {
+    const list = e.detail;
+
+    if (!list) {
+      updateRawConfig();
+      updateRawSubjects();
+      updateRawChapters();
+      updateRawUserRoutines();
+      return;
+    }
+
+    if (list.includes("updateRawConfig")) updateRawConfig();
+    if (list.includes("updateRawSubjects")) updateRawSubjects();
+    if (list.includes("updateRawChapters")) updateRawChapters();
+    if (list.includes("updateRawUserRoutines")) updateRawRoutines();
   }
 
   useEffect(() => {

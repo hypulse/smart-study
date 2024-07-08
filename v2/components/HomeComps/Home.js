@@ -10,6 +10,7 @@ import StudyPlans from "../Widgets/StudyPlans.js";
 import RoutineCalendar from "../Widgets/RoutineCalendar.js";
 import AddTask from "../Widgets/AddTask.js";
 import RoutinesToDo from "../Widgets/RoutinesToDo.js";
+import StudyCycle from "../Widgets/StudyCycle.js";
 
 export default function Home() {
   const { FullScreen, openFullScreen } = useFullScreen();
@@ -36,6 +37,12 @@ export default function Home() {
     {
       Comp: StudyCalendar,
       title: "학습 달력",
+      hidden: false,
+      pinned: false,
+    },
+    {
+      Comp: StudyCycle,
+      title: "학습 주기",
       hidden: false,
       pinned: false,
     },
