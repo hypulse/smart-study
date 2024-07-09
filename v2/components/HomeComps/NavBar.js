@@ -17,7 +17,9 @@ export default function NavBar({ pages, applyWidgets }) {
       )}
       <button
         className="btn btn-primary btn-square"
-        onClick=${requestUpdateRawData}
+        onClick=${() => {
+          requestUpdateRawData();
+        }}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"

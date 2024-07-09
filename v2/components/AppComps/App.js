@@ -2,7 +2,7 @@ import { CONFIG_RECORD_ID, PB_URL } from "../../env.js";
 import { AppContextProvider } from "../../hooks/useAppContext.js";
 import usePb from "../../hooks/usePb.js";
 import usePbData from "../../hooks/usePbData.js";
-import { html, useEffect, useState } from "../../libs/preact.js";
+import { html, useEffect, useMemo, useState } from "../../libs/preact.js";
 import getChaptersBySubject from "../../utils/obj-mappers/getChaptersBySubject.js";
 import { syncAuth } from "../../utils/pb-utils.js";
 import Home from "../HomeComps/Home.js";
@@ -54,7 +54,7 @@ export default function App() {
     if (list.includes("updateRawConfig")) updateRawConfig();
     if (list.includes("updateRawSubjects")) updateRawSubjects();
     if (list.includes("updateRawChapters")) updateRawChapters();
-    if (list.includes("updateRawUserRoutines")) updateRawRoutines();
+    if (list.includes("updateRawUserRoutines")) updateRawUserRoutines();
   }
 
   useEffect(() => {
@@ -96,16 +96,22 @@ export default function App() {
     return html`<${Loading} />`;
   }
 
-  const chaptersBySubject = getChaptersBySubject(rawChapters, rawSubjects);
-  const calendarStudyEvents = getCalendarEventsOfChapters(
-    chaptersBySubject,
-    rawSubjects
+  const chaptersBySubject = useMemo(() => {
+    const chapters = getChaptersBySubject(rawChapters, rawSubjects);
+    return chapters;
+  }, [rawChapters, rawSubjects]);
+  const calendarStudyEvents = useMemo(() => {
+    const events = getCalendarEventsOfChapters(chaptersBySubject, rawSubjects);
+    return events;
+  }, [chaptersBySubject, rawSubjects]);
+  const calendarRoutineEvents = useMemo(() => {
+    const events = getCalendarEventsOfRoutines(rawRoutines, rawUserRoutines);
+    return events;
+  }, [rawRoutines, rawUserRoutines]);
+  const routinesToDo = useMemo(
+    () => rawUserRoutines.filter(({ done }) => !done),
+    [rawUserRoutines]
   );
-  const calendarRoutineEvents = getCalendarEventsOfRoutines(
-    rawRoutines,
-    rawUserRoutines
-  );
-  const routinesToDo = rawUserRoutines.filter(({ done }) => !done);
 
   return html`
     <${AppContextProvider}
