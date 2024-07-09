@@ -10,9 +10,9 @@ import AddTask from "../Widgets/AddTask.js";
 import RoutinesToDo from "../Widgets/RoutinesToDo.js";
 import StudyCycle from "../Widgets/StudyCycle.js";
 import Menu from "../Widgets/Menu.js";
+import { HomeContextProvider } from "../../hooks/useHomeContext.js";
 
 export default function Home() {
-  // TODO - Add Home Context
   const { FullScreen, openFullScreen } = useFullScreen();
   const [widgets, setWidgets] = useState([
     {
@@ -101,16 +101,21 @@ export default function Home() {
   }, []);
 
   return html`
-    <${NavBar} pages=${pages} applyWidgets=${applyWidgets} />
-    <div className="flex flex-col flex-wrap max-h-screen">
-      ${activeWidgets.map(
-        ({ Comp, title }) => html`
-          <div className="w-1/2 p-2" key=${title}>
-            <${Comp} />
-          </div>
-        `
-      )}
-    </div>
-    <${FullScreen} />
+    <${HomeContextProvider}
+      value=${{ widgets, pages, applyWidgets, openFullScreen }}
+      children=${html`
+        <${NavBar} />
+        <div className="flex flex-col flex-wrap max-h-screen">
+          ${activeWidgets.map(
+            ({ Comp, title }) => html`
+              <div className="w-1/2 p-2" key=${title}>
+                <${Comp} />
+              </div>
+            `
+          )}
+        </div>
+        <${FullScreen} />
+      `}
+    />
   `;
 }

@@ -1,8 +1,11 @@
+import { useHomeContext } from "../../hooks/useHomeContext.js";
 import { html } from "../../libs/preact.js";
 import requestUpdateRawData from "../../utils/requestUpdateRawData.js";
 import Clock from "./Clock.js";
 
-export default function NavBar({ pages, applyWidgets }) {
+export default function NavBar() {
+  const { pages, applyWidgets } = useHomeContext();
+
   return html`
     <div className="flex gap-4 items-center">
       ${pages.map(
