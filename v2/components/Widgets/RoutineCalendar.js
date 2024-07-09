@@ -3,7 +3,7 @@ import { html, useEffect, useRef } from "../../libs/preact.js";
 import showModal from "../../utils/showModal.js";
 
 export default function RoutineCalendar() {
-  const { calendarRoutineEvents } = useAppContext();
+  const { calendarRoutineEvents, rawUserRoutines } = useAppContext();
   const ref = useRef();
 
   useEffect(() => {
@@ -35,7 +35,7 @@ export default function RoutineCalendar() {
     return () => {
       calendar.destroy();
     };
-  }, [calendarRoutineEvents]);
+  }, [rawUserRoutines]);
 
   useEffect(() => {
     if (!ref.current) {

@@ -95,6 +95,8 @@
  * rawConfig: RawConfig
  * rawSubjects: RawSubject[]
  * rawChapters: RawChapter[]
+ * rawRoutines: RawRoutine[]
+ * rawUserRoutines: RawUserRoutine[]
  * chaptersBySubject: Record<string, NewChapter[]>
  * calendarStudyEvents: (CalendarEvent&{allDay:true})[]
  * calendarRoutineEvents: CalendarEvent[]

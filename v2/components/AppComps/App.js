@@ -113,6 +113,8 @@ export default function App() {
         rawConfig,
         rawSubjects,
         rawChapters,
+        rawRoutines,
+        rawUserRoutines,
         chaptersBySubject,
         calendarStudyEvents,
         calendarRoutineEvents,
