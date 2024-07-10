@@ -59,9 +59,12 @@ function ChapterBox(
     ? html`<${LateBadge} />`
     : null;
 
-  async function handleDone(index) {
+  const handleDone = (index) => async (e) => {
     const answer = confirm("Are you sure you want to mark this as done?");
-    if (!answer) return;
+    if (!answer) {
+      e.preventDefault();
+      return;
+    }
     const newToDos = [...toDos];
     newToDos[index].done = true;
     newToDos[index].doneDate = dayjs().format("YYYY-MM-DD");
@@ -70,7 +73,7 @@ function ChapterBox(
     });
     alert("Marked as done!");
     requestUpdateRawData();
-  }
+  };
 
   return html`
     <details className="collapse bg-base-200">
@@ -94,7 +97,7 @@ function ChapterBox(
               <${ToDoBox}
                 toDo=${toDo}
                 accDayAfter=${accDayAfter}
-                handleDone=${handleDone.bind(null, index)}
+                handleDone=${handleDone(index)}
               />
             `;
           })}
