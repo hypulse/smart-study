@@ -55,6 +55,12 @@ export default function StudyCycle() {
   return html`
     <div className="grid gap-2">
       <p>시작일: ${studyCycleStart} (${dayFromStart}일 경과)</p>
+      <ul className="text-sm">
+        ${studyCycle.map(
+          (step, index) =>
+            html`<li>${index + 1}.${step.title}: ${step.description}</li>`
+        )}
+      </ul>
       <ul className="steps">
         ${studyCycle.map(
           (step, i) =>
