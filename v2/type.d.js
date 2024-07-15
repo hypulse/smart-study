@@ -64,6 +64,17 @@
  * @typedef {{
  * title: string
  * description: string
+ * start: string
+ * end: string;
+ * allDay: false
+ * repeat: "YEARLY"|"MONTHLY"
+ * }} RawCalendarEvent
+ */
+
+/**
+ * @typedef {{
+ * title: string
+ * description: string
  * start: Date
  * end: Date
  * allDay: boolean
