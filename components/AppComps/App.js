@@ -12,10 +12,12 @@ import EnterDataInfo from "./EnterDataInfo.js";
 import Popup from "./Popup.js";
 import getCalendarEventsOfChapters from "../../utils/obj-mappers/getCalendarEventsOfChapters.js";
 import getCalendarEventsOfRoutines from "../../utils/obj-mappers/getCalendarEventsOfRoutines.js";
+import getCalendarEvents from "../../utils/obj-mappers/getCalendarEvents.js";
 
 export default function App() {
   const { authenticated } = usePb();
   const [dataReady, setDataReady] = useState(false);
+  const { data: rawEvents, ready: rawEventsReady } = usePbData("events");
   const {
     data: rawConfig,
     ready: rawConfigReady,
@@ -69,6 +71,7 @@ export default function App() {
 
   useEffect(() => {
     if (
+      rawEventsReady &&
       rawConfigReady &&
       rawSubjectsReady &&
       rawChaptersReady &&
@@ -78,6 +81,7 @@ export default function App() {
       setDataReady(true);
     }
   }, [
+    rawEventsReady,
     rawConfigReady,
     rawSubjectsReady,
     rawChaptersReady,
@@ -109,6 +113,10 @@ export default function App() {
     const events = getCalendarEventsOfRoutines(rawRoutines, rawUserRoutines);
     return events;
   }, [rawRoutines, rawUserRoutines]);
+  const calendarEvents = useMemo(() => {
+    const events = getCalendarEvents(rawEvents);
+    return events;
+  }, [rawEvents]);
   const routinesToDo = useMemo(
     () => rawUserRoutines.filter(({ done }) => !done),
     [rawUserRoutines]
@@ -117,6 +125,7 @@ export default function App() {
   return html`
     <${AppContextProvider}
       value=${{
+        rawEvents,
         rawConfig,
         rawSubjects,
         rawChapters,
@@ -125,6 +134,7 @@ export default function App() {
         chaptersBySubject,
         calendarStudyEvents,
         calendarRoutineEvents,
+        calendarEvents,
         routinesToDo,
       }}
       children=${html`

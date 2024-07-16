@@ -3,8 +3,8 @@ import { html, useEffect, useRef } from "../../libs/preact.js";
 import showModal from "../../utils/showModal.js";
 
 export default function RoutineCalendar() {
-  const { calendarRoutineEvents } = useAppContext();
   const ref = useRef();
+  const { calendarRoutineEvents } = useAppContext();
 
   useEffect(() => {
     if (!ref.current || !window.FullCalendar) {

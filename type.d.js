@@ -64,22 +64,21 @@
  * @typedef {{
  * title: string
  * description: string
- * start: string
- * end: string;
- * allDay: false
- * repeat: "YEARLY"|"MONTHLY"
- * }} RawCalendarEvent
+ * start: Date
+ * end: Date
+ * allDay: boolean
+ * backgroundColor: string
+ * }} CalendarEvent
  */
 
 /**
  * @typedef {{
  * title: string
  * description: string
- * start: Date
- * end: Date
- * allDay: boolean
- * backgroundColor: string
- * }} CalendarEvent
+ * startDate: string
+ * endDate: string
+ * repeat: "YEARLY"|"MONTHLY"
+ * }} RawEvent
  */
 
 /**
@@ -103,6 +102,7 @@
 
 /**
  * @typedef {{
+ * rawEvents: RawEvent[]
  * rawConfig: RawConfig
  * rawSubjects: RawSubject[]
  * rawChapters: RawChapter[]
@@ -111,6 +111,7 @@
  * chaptersBySubject: Record<string, NewChapter[]>
  * calendarStudyEvents: (CalendarEvent&{allDay:true})[]
  * calendarRoutineEvents: CalendarEvent[]
- * routinesToDo: (RawUserRoutine&DbFields)[]
+ * calendarEvents: CalendarEvent[]
+ * routinesToDo: RawUserRoutine&DbFields[]
  * }} AppContext
  */
