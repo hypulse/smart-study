@@ -137,7 +137,7 @@ export default function AddTask() {
 }
 
 function TimeTypes({ setTimeType }) {
-  const timeTypes = ["40+10", "90+30", "15", "20", "30", "60", "90"];
+  const timeTypes = ["40+10", "90+30", "10", "15", "20", "30", "60", "90"];
 
   return html`
     <div className="grid grid-cols-3 gap-x-4">
