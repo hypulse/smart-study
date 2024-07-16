@@ -1,44 +1,63 @@
-function getCalendarEvents(rawEvents) {
-  //     const events = useMemo(() => {
-  //     function eventToCalendarEvent(event) {
-  //       const { date, description, title } = event;
-  //       return {
-  //         title,
-  //         description,
-  //         start: dayjs(date).startOf("day").toDate(),
-  //         end: dayjs(date).endOf("day").toDate(),
-  //         allDay: true,
-  //       };
-  //     }
-  //     let list = [];
-  //     rawEvents.forEach((rawEvent) => {
-  //       if (rawEvent.repeat === "YEARLY") {
-  //         for (var i = 0; i <= 1; i++) {
-  //           rawEvent.date = dayjs(rawEvent.date)
-  //             .set("year", dayjs().year())
-  //             .add(i, "year")
-  //             .format("YYYY-MM-DD");
-  //           list.push(eventToCalendarEvent(rawEvent));
-  //         }
-  //         return;
-  //       }
-  //       if (rawEvent.repeat === "MONTHLY") {
-  //         for (var i = 0; i < 24; i++) {
-  //           rawEvent.date = dayjs(rawEvent.date)
-  //             .set("year", dayjs().year())
-  //             .set("month", 0)
-  //             .add(i, "month")
-  //             .format("YYYY-MM-DD");
-  //           list.push(eventToCalendarEvent(rawEvent));
-  //         }
-  //         return;
-  //       }
-  //       list.push(eventToCalendarEvent(rawEvent));
-  //     });
-  //     return list;
-  //   }, [rawEvents]);
-
-  return [];
+function convertEventToCalendarEvent(rawEvent) {
+  const { description, title, startDate, endDate } = rawEvent;
+  const start = dayjs(startDate).startOf("day").toDate();
+  let end = dayjs(startDate).endOf("day").toDate();
+  if (endDate) {
+    end = dayjs(endDate).endOf("day").toDate();
+  }
+  return {
+    title,
+    description,
+    start,
+    end,
+    allDay: true,
+  };
 }
 
-export default getCalendarEvents;
+export default function getCalendarEvents(rawEvents) {
+  const calendarEvents = [];
+
+  rawEvents.forEach((rawEvent) => {
+    switch (rawEvent.repeat) {
+      case "YEARLY":
+        for (let i = 0; i < 2; i++) {
+          const newRawEvent = { ...rawEvent };
+          newRawEvent.startDate = dayjs(rawEvent.startDate)
+            .set("year", dayjs().year())
+            .add(i, "year")
+            .format("YYYY-MM-DD");
+          if (newRawEvent.endDate) {
+            newRawEvent.endDate = dayjs(rawEvent.endDate)
+              .set("year", dayjs().year())
+              .add(i, "year")
+              .format("YYYY-MM-DD");
+          }
+          calendarEvents.push(convertEventToCalendarEvent(newRawEvent));
+        }
+        break;
+      case "MONTHLY":
+        for (let i = 0; i < 24; i++) {
+          const newRawEvent = { ...rawEvent };
+          newRawEvent.startDate = dayjs(rawEvent.startDate)
+            .set("year", dayjs().year())
+            .set("month", 0)
+            .add(i, "month")
+            .format("YYYY-MM-DD");
+          if (newRawEvent.endDate) {
+            newRawEvent.endDate = dayjs(rawEvent.endDate)
+              .set("year", dayjs().year())
+              .set("month", 0)
+              .add(i, "month")
+              .format("YYYY-MM-DD");
+          }
+          calendarEvents.push(convertEventToCalendarEvent(newRawEvent));
+        }
+        break;
+      default:
+        calendarEvents.push(convertEventToCalendarEvent(rawEvent));
+        break;
+    }
+  });
+
+  return calendarEvents;
+}
