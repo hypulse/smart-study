@@ -13,9 +13,11 @@ import Menu from "../Widgets/Menu.js";
 import { HomeContextProvider } from "../../hooks/useHomeContext.js";
 import requestUpdateRawData from "../../utils/requestUpdateRawData.js";
 import Screensaver from "../Widgets/Screensaver.js";
+import useSpeakOClock from "../../hooks/useSpeakOClock.js";
 
 export default function Home() {
   const { FullScreen, openFullScreen } = useFullScreen();
+  useSpeakOClock();
   const [widgets, setWidgets] = useState([
     {
       Comp: RoutineCalendar,
@@ -102,10 +104,12 @@ export default function Home() {
     });
   };
 
+  // 초기 레이아웃 설정
   useEffect(() => {
     applyWidgets(pages[0].widgets);
   }, []);
 
+  // 자동 데이터 갱신 설정
   useEffect(() => {
     const interval = setInterval(requestUpdateRawData, 1000 * 60 * 5);
 
@@ -113,6 +117,35 @@ export default function Home() {
       clearInterval(interval);
     };
   }, []);
+
+  // utterance 서비스 등록
+  useEffect(() => {
+    const interval = setInterval(() => {
+      function utteranceSpeak(text) {
+        return new Promise((resolve, reject) => {
+          const utterance = new SpeechSynthesisUtterance(text);
+          utterance.lang = "ko-KR";
+
+          utterance.onend = () => resolve();
+          utterance.onerror = () => reject();
+
+          speechSynthesis.speak(utterance);
+        });
+      }
+
+      function speakRecursion() {
+        if (window.speakList && window.speakList.length > 0) {
+          utteranceSpeak(window.speakList.shift()).then(speakRecursion);
+        }
+      }
+
+      speakRecursion();
+    }, 1000);
+
+    return () => {
+      clearInterval(interval);
+    };
+  });
 
   return html`
     <${HomeContextProvider}

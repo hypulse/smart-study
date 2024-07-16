@@ -3,6 +3,7 @@ import { useAppContext } from "../../hooks/useAppContext.js";
 import usePb from "../../hooks/usePb.js";
 import { html, useEffect, useRef } from "../../libs/preact.js";
 import requestUpdateRawData from "../../utils/requestUpdateRawData.js";
+import speak from "../../utils/speak.js";
 
 export default function RoutinesToDo() {
   const { routinesToDo } = useAppContext();
@@ -37,6 +38,7 @@ function RoutinesToDoCard(
     .set("minute", end.split(":")[1])
     .set("second", 0)
     .format("A hh시 mm분");
+  const timeAlerted = useRef(false);
 
   async function handleComplete() {
     if (routine.start >= dayjs().format("HH:mm")) {
@@ -60,18 +62,34 @@ function RoutinesToDoCard(
       .set("minute", end.split(":")[1])
       .set("second", 0)
       .diff(dayjs(), "millisecond");
-    if (diff < 0) return "00분 00초 남음";
+    if (diff < 0)
+      return {
+        minutes: 0,
+        seconds: 0,
+      };
     const minutes = Math.floor(diff / 60000);
     const seconds = Math.floor((diff % 60000) / 1000);
-    return `${minutes}분 ${seconds}초 남음`;
+    return {
+      minutes: minutes,
+      seconds: seconds,
+    };
   }
 
   useEffect(() => {
     if (!ref.current) return;
+
     const interval = setInterval(() => {
-      ref.current.textContent = getLeftTime();
+      const { minutes, seconds } = getLeftTime();
+      if (!timeAlerted.current && minutes <= 10) {
+        timeAlerted.current = true;
+        speak(`${minutes}분 남았습니다.`);
+      }
+      ref.current.textContent = `${minutes}분 ${seconds}초 남음`;
     }, 1000);
-    return () => clearInterval(interval);
+
+    return () => {
+      clearInterval(interval);
+    };
   }, []);
 
   return html`
@@ -90,9 +108,7 @@ function RoutinesToDoCard(
           />
         </svg>
       </button>
-      <h2 className="text-lg">
-        ${title} (<span ref=${ref}>${getLeftTime()}</span>)
-      </h2>
+      <h2 className="text-lg">${title} (<span ref=${ref}></span>)</h2>
       <p>${startDisplay} - ${endDisplay}</p>
       <div className="card-actions justify-end">
         <button className="btn btn-primary" onClick=${handleComplete}>

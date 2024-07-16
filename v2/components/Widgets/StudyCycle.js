@@ -14,6 +14,7 @@ export default function StudyCycle() {
   const [stepDescriptions, setStepDescriptions] = useState(
     studyCycle.map((step) => step.description || "")
   );
+  const itemIndex = studyCycle.findIndex((step) => !step.done);
 
   const handleClick = async () => {
     const lastStep = studyCycle.findIndex((step) => !step.done);
@@ -55,12 +56,6 @@ export default function StudyCycle() {
   return html`
     <div className="grid gap-2">
       <p>시작일: ${studyCycleStart} (${dayFromStart}일 경과)</p>
-      <ul className="text-sm">
-        ${studyCycle.map(
-          (step, index) =>
-            html`<li>${index + 1}.${step.title}: ${step.description}</li>`
-        )}
-      </ul>
       <ul className="steps">
         ${studyCycle.map(
           (step, i) =>
@@ -95,12 +90,23 @@ export default function StudyCycle() {
             </div>
           `
         : html`
-            <p>${studyCycle.find((step) => !step.done).description || ""}</p>
+            <ul>
+              ${studyCycle.map(
+                (step, index) =>
+                  html`<li
+                    className="${itemIndex === index
+                      ? "text-info font-bold"
+                      : ""}"
+                  >
+                    ${step.title}: ${step.description}
+                  </li>`
+              )}
+            </ul>
           `}
       ${allDone
         ? html`
             <button className="btn btn-primary" onClick=${handleReset}>
-              훌륭합니다!
+              다시 시작하기
             </button>
           `
         : html`
