@@ -33,7 +33,7 @@ function FullScreen({ comp, setComp }) {
   }
 
   return html`
-    <div className="fixed inset-0 bg-base-100">
+    <div className="fixed inset-0 bg-base-100" style="z-index: 9999;">
       <button
         className="btn btn-square btn-primary absolute top-2 right-2"
         style="z-index: 9999;"

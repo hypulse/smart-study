@@ -61,7 +61,9 @@ function RoutinesToDoCard(
       .set("second", 0)
       .diff(dayjs(), "millisecond");
     if (diff < 0) return "00분 00초 남음";
-    return dayjs(diff).format("mm분 ss초 남음");
+    const minutes = Math.floor(diff / 60000);
+    const seconds = Math.floor((diff % 60000) / 1000);
+    return `${minutes}분 ${seconds}초 남음`;
   }
 
   useEffect(() => {

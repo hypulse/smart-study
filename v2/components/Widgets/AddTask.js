@@ -11,6 +11,21 @@ export default function AddTask() {
   const subjects = rawSubjects.map((subject) => subject.title);
   const [task, setTask] = useState(null);
   const [timeType, setTimeType] = useState(null);
+  const [userStart, setUserStart] = useState(null);
+  const [userEnd, setUserEnd] = useState(null);
+  const [userDone, setUserDone] = useState(true);
+
+  const handleStartTimeChange = (event) => {
+    setUserStart("" + event.target.value);
+  };
+
+  const handleEndTimeChange = (event) => {
+    setUserEnd("" + event.target.value);
+  };
+
+  const handleDoneChange = (event) => {
+    setUserDone(event.target.checked);
+  };
 
   const addTask = async () => {
     const start = dayjs().format("HH:mm");
@@ -39,6 +54,23 @@ export default function AddTask() {
     requestUpdateRawData();
   };
 
+  const addTask2 = async () => {
+    if (userStart >= userEnd) return;
+    const data = {
+      title: task,
+      start: userStart,
+      end: userEnd,
+      date: dayjs().format("YYYY-MM-DD"),
+      done: userDone,
+    };
+    await pb.collection(`${DB_PREFIX}_user_routines`).create(data);
+    alert("Task Added");
+    setUserStart(null);
+    setUserEnd(null);
+    setUserDone(true);
+    requestUpdateRawData();
+  };
+
   return html`
     <div className="grid gap-2">
       <div className="join flex-wrap">
@@ -57,11 +89,46 @@ export default function AddTask() {
           `
         )}
       </div>
+      <div className="flex gap-2 items-center">
+        <div>
+          <label>
+            시작 시간:${" "}
+            <input
+              type="time"
+              onChange=${handleStartTimeChange}
+              value=${userStart}
+            />
+          </label>
+        </div>
+        <div>
+          <label>
+            종료 시간:${" "}
+            <input
+              type="time"
+              onChange=${handleEndTimeChange}
+              value=${userEnd}
+            />
+          </label>
+        </div>
+        <input
+          type="checkbox"
+          className="checkbox"
+          onChange=${handleDoneChange}
+          checked=${userDone}
+        />
+        <button
+          className="btn btn-primary btn-sm"
+          onClick=${addTask2}
+          disabled=${!(userStart && userEnd && task)}
+        >
+          Add Task 2
+        </button>
+      </div>
       <${TimeTypes} setTimeType=${setTimeType} />
       <button
         className="btn btn-primary"
         onClick=${addTask}
-        disabled=${!task || !timeType}
+        disabled=${!(task && timeType)}
       >
         Add Task
       </button>

@@ -32,12 +32,13 @@ export default function App() {
     fetchData: updateRawChapters,
   } = usePbData("chapters");
   const { data: rawRoutines, ready: rawRoutinesReady } = usePbData("routines");
+  const date = `${dayjs().format("YYYY-MM-DD")}`;
   const {
     data: rawUserRoutines,
     ready: rawUserRoutinesReady,
     fetchData: updateRawUserRoutines,
   } = usePbData("user_routines", null, {
-    filter: `date = '${dayjs().format("YYYY-MM-DD")}'`,
+    filter: `date = '${date}'`,
   });
 
   function updateRawData(e) {

@@ -11,6 +11,8 @@ import RoutinesToDo from "../Widgets/RoutinesToDo.js";
 import StudyCycle from "../Widgets/StudyCycle.js";
 import Menu from "../Widgets/Menu.js";
 import { HomeContextProvider } from "../../hooks/useHomeContext.js";
+import requestUpdateRawData from "../../utils/requestUpdateRawData.js";
+import Screensaver from "../Widgets/Screensaver.js";
 
 export default function Home() {
   const { FullScreen, openFullScreen } = useFullScreen();
@@ -60,6 +62,11 @@ export default function Home() {
       title: "메뉴",
       hidden: true,
     },
+    {
+      Comp: Screensaver,
+      title: "화면 보호기",
+      hidden: true,
+    },
   ]);
   const pages = [
     {
@@ -71,10 +78,9 @@ export default function Home() {
       widgets: ["StudyCalendar", "StudyPlans"],
     },
     {
-      title: "Others",
-      widgets: ["StudyCycle"],
+      title: "Menu",
+      widgets: ["StudyCycle", "Menu"],
     },
-    { title: "Menu", widgets: ["Menu"] },
   ];
   const activeWidgets = widgets.filter((widget) => !widget.hidden);
 
@@ -98,6 +104,14 @@ export default function Home() {
 
   useEffect(() => {
     applyWidgets(pages[0].widgets);
+  }, []);
+
+  useEffect(() => {
+    const interval = setInterval(requestUpdateRawData, 1000 * 60 * 5);
+
+    return () => {
+      clearInterval(interval);
+    };
   }, []);
 
   return html`
