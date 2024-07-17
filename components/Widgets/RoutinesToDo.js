@@ -111,7 +111,7 @@ function RoutinesToDoCard(
       <h2 className="text-lg">${title} (<span ref=${ref}></span>)</h2>
       <p>${startDisplay} - ${endDisplay}</p>
       <div className="card-actions justify-end">
-        <button className="btn btn-primary" onClick=${handleComplete}>
+        <button className="btn btn-outline" onClick=${handleComplete}>
           완료
         </button>
       </div>
