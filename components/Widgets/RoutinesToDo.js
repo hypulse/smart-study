@@ -82,7 +82,7 @@ function RoutinesToDoCard(
       const { minutes, seconds } = getLeftTime();
       if (!timeAlerted.current && minutes <= 10) {
         timeAlerted.current = true;
-        speak(`${minutes}분 남았습니다.`);
+        speak(`${title} ${minutes}분 남았습니다.`);
       }
       ref.current.textContent = `${minutes}분 ${seconds}초 남음`;
     }, 1000);
