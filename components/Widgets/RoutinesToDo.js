@@ -77,6 +77,9 @@ function RoutinesToDoCard(
   useEffect(() => {
     if (!ref.current) return;
 
+    const { minutes, seconds } = getLeftTime();
+    ref.current.textContent = `${minutes}분 ${seconds}초 남음`;
+
     const interval = setInterval(() => {
       const { minutes, seconds } = getLeftTime();
       const timeAlertedList = localStorage.getItem("timeAlertedList")
