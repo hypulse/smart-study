@@ -15,6 +15,7 @@ import requestUpdateRawData from "../../utils/requestUpdateRawData.js";
 import Screensaver from "../Widgets/Screensaver.js";
 import useSpeakOClock from "../../hooks/useSpeakOClock.js";
 import EventCalendar from "../Widgets/EventCalendar.js";
+import Note from "../Widgets/Note.js";
 
 export default function Home() {
   const { FullScreen, openFullScreen } = useFullScreen();
@@ -75,6 +76,11 @@ export default function Home() {
       title: "이벤트 달력",
       hidden: true,
     },
+    {
+      Comp: Note,
+      title: "노트",
+      hidden: true,
+    },
   ]);
   const pages = [
     {
@@ -87,7 +93,7 @@ export default function Home() {
     },
     {
       title: "Menu",
-      widgets: ["EventCalendar", "StudyCycle", "Menu"],
+      widgets: ["EventCalendar", "StudyCycle", "Note", "Menu"],
     },
   ];
   const activeWidgets = widgets.filter((widget) => !widget.hidden);
