@@ -38,7 +38,6 @@ function RoutinesToDoCard(
     .set("minute", end.split(":")[1])
     .set("second", 0)
     .format("A hh시 mm분");
-  const timeAlerted = useRef(false);
 
   async function handleComplete() {
     if (routine.start >= dayjs().format("HH:mm")) {
@@ -80,8 +79,15 @@ function RoutinesToDoCard(
 
     const interval = setInterval(() => {
       const { minutes, seconds } = getLeftTime();
-      if (!timeAlerted.current && minutes <= 10) {
-        timeAlerted.current = true;
+      const timeAlertedList = localStorage.getItem("timeAlertedList")
+        ? JSON.parse(localStorage.getItem("timeAlertedList"))
+        : [];
+      if (!timeAlertedList.includes(routine.id) && minutes <= 10) {
+        timeAlertedList.push(routine.id);
+        localStorage.setItem(
+          "timeAlertedList",
+          JSON.stringify(timeAlertedList)
+        );
         speak(`${title} ${minutes}분 남았습니다.`);
       }
       ref.current.textContent = `${minutes}분 ${seconds}초 남음`;
