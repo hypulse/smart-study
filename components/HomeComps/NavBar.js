@@ -7,7 +7,7 @@ export default function NavBar() {
   const { pages, applyWidgets } = useHomeContext();
 
   return html`
-    <div className="flex gap-4 items-center">
+    <div className="flex gap-4 items-center fixed h-12">
       ${pages.map(
         (p) => html`
           <a
@@ -60,5 +60,6 @@ export default function NavBar() {
       </div>
       <${Clock} />
     </div>
+    <div className="h-12" />
   `;
 }

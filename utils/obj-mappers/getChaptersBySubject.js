@@ -18,6 +18,9 @@ function getChaptersBySubject(
     const indexB = Number(b.title.split(".")[0]);
     return indexA - indexB;
   });
+  rawChapters = rawChapters.filter(({ subject }) =>
+    rawSubjects.find(({ id }) => id === subject)
+  );
   // subject>toDosForm의 ToDoTypeA[]에 chapter>toDos의 ToDoTypeB[]를 합치는 작업
   // chapter>toDos는 undefined일 수 있으므로, 해당 경우에 대한 처리도 추가
   // toaDos의 길이는 toDosForm의 길이를 따라가야 하므로, toDosForm의 길이를 기준으로 처리

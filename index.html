@@ -3,19 +3,6 @@
   <head>
     <script>
       (function () {
-        if (
-          [
-            "dev.ogog.kr",
-            "alp.ogog.kr",
-            "pri-a-promotion.okcashbag.com",
-            "a-promotion.okcashbag.com",
-            "pri-dev-promotion.okcashbag.com",
-            "dev-promotion.okcashbag.com",
-          ].indexOf(location.hostname) === -1
-        ) {
-          return;
-        }
-
         var src = "//cdn.jsdelivr.net/npm/eruda";
         document.write("<scr" + 'ipt src="' + src + '"></scr' + "ipt>");
         document.write("<scr" + "ipt>eruda.init();</scr" + "ipt>");
@@ -32,7 +19,7 @@
     <script src="https://cdn.jsdelivr.net/npm/dayjs@1.11.7/dayjs.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/dayjs@1.11.7/plugin/isBetween.min.js"></script>
     <script>
-      dayjs.extend(window.dayjs_plugin_utc);
+      dayjs.extend(window.dayjs_plugin_isBetween);
     </script>
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js"></script>
     <script src="./libs/pocketbase.umd.js"></script>

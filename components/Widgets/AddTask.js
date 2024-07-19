@@ -51,6 +51,8 @@ export default function AddTask() {
       await pb.collection(`${DB_PREFIX}_user_routines`).create(data);
     }
     alert("Task Added");
+    setTask(null);
+    setTimeType(null);
     requestUpdateRawData();
   };
 
