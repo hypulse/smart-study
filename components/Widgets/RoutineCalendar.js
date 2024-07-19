@@ -1,3 +1,4 @@
+import { ROUTINE_DATE } from "../../env.js";
 import { useAppContext } from "../../hooks/useAppContext.js";
 import { html, useEffect, useRef } from "../../libs/preact.js";
 import showModal from "../../utils/showModal.js";
@@ -31,6 +32,40 @@ export default function RoutineCalendar() {
     });
 
     calendar.render();
+    const toolbar = document.querySelector(`.fc-toolbar`);
+    toolbar.style.position = "absolute";
+    toolbar.style.background = "black";
+    toolbar.style.zIndex = "9999";
+
+    const prevBtn = document.querySelector(
+      `.fc-toolbar [title="Previous day"]`
+    );
+    const nextBtn = document.querySelector(`.fc-toolbar [title="Next day"]`);
+    const todayBtn = document.querySelector(`.fc-toolbar [title="Today"]`);
+    [prevBtn, nextBtn, todayBtn].forEach((btn) => {
+      btn.disabled = false;
+    });
+    prevBtn.onclick = () => {
+      const params = new URLSearchParams(window.location.search);
+      params.set(
+        "routine_date",
+        `${dayjs(ROUTINE_DATE).add(-1, "day").format("YYYY-MM-DD")}`
+      );
+      window.location.search = params.toString();
+    };
+    nextBtn.onclick = () => {
+      const params = new URLSearchParams(window.location.search);
+      params.set(
+        "routine_date",
+        `${dayjs(ROUTINE_DATE).add(1, "day").format("YYYY-MM-DD")}`
+      );
+      window.location.search = params.toString();
+    };
+    todayBtn.onclick = () => {
+      const params = new URLSearchParams(window.location.search);
+      params.set("routine_date", `${dayjs().format("YYYY-MM-DD")}`);
+      window.location.search = params.toString();
+    };
 
     return () => {
       calendar.destroy();

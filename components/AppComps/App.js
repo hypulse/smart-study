@@ -1,4 +1,4 @@
-import { CONFIG_RECORD_ID, PB_URL } from "../../env.js";
+import { CONFIG_RECORD_ID, PB_URL, ROUTINE_DATE } from "../../env.js";
 import { AppContextProvider } from "../../hooks/useAppContext.js";
 import usePb from "../../hooks/usePb.js";
 import usePbData from "../../hooks/usePbData.js";
@@ -36,7 +36,7 @@ export default function App() {
     fetchData: updateRawChapters,
   } = usePbData("chapters");
   const { data: rawRoutines, ready: rawRoutinesReady } = usePbData("routines");
-  const date = `${dayjs().format("YYYY-MM-DD")}`;
+  const date = `${ROUTINE_DATE || dayjs().format("YYYY-MM-DD")}`;
   const {
     data: rawUserRoutines,
     ready: rawUserRoutinesReady,

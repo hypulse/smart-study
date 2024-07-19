@@ -1,3 +1,4 @@
+import { ROUTINE_DATE } from "../../env.js";
 import getColorByTitle from "../getColorByTitle.js";
 
 function getCalendarEventsOfRoutines(
@@ -13,7 +14,7 @@ function getCalendarEventsOfRoutines(
   const calendarEvents = [];
   rawRoutines.forEach(({ title, start, end, description, repeat, id }) => {
     const dayOfWeek = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"][
-      dayjs().day()
+      ROUTINE_DATE ? dayjs(ROUTINE_DATE).day() : dayjs().day()
     ];
     if (!repeat.includes(dayOfWeek)) {
       return;
