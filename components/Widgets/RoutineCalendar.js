@@ -56,6 +56,48 @@ export default function RoutineCalendar() {
     };
   }, []);
 
+  useEffect(() => {
+    const speakRoutine = () => {
+      const routineAlertedListDate = localStorage.getItem(
+        "routineAlertedList-date"
+      );
+      if (routineAlertedListDate !== dayjs().format("YYYY-MM-DD")) {
+        localStorage.removeItem("routineAlertedList");
+        localStorage.setItem(
+          "routineAlertedList-date",
+          dayjs().format("YYYY-MM-DD")
+        );
+      }
+      const routineAlertedList = localStorage.getItem("routineAlertedList")
+        ? JSON.parse(localStorage.getItem("routineAlertedList"))
+        : [];
+
+      const routine = calendarRoutineEvents.find(
+        ({ isUserRoutine, id, start, end }) =>
+          !isUserRoutine &&
+          !routineAlertedList.includes(id) &&
+          dayjs().isBetween(dayjs(start), dayjs(end))
+      );
+
+      if (routine) {
+        routineAlertedList.push(routine.id);
+        localStorage.setItem(
+          "routineAlertedList",
+          JSON.stringify(routineAlertedList)
+        );
+        speak(`${routine.title}을 시작하세요. ${routine.description}`);
+      }
+    };
+
+    speakRoutine();
+
+    const interval = setInterval(speakRoutine, 1000);
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, [calendarRoutineEvents]);
+
   return html`
     <div style="height: 90vh; overflow-y: auto;">
       <div ref=${ref} />

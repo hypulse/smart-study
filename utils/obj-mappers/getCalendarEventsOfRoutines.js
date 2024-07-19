@@ -11,7 +11,7 @@ function getCalendarEventsOfRoutines(
   rawUserRoutines
 ) {
   const calendarEvents = [];
-  rawRoutines.forEach(({ title, start, end, description, repeat }) => {
+  rawRoutines.forEach(({ title, start, end, description, repeat, id }) => {
     const dayOfWeek = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"][
       dayjs().day()
     ];
@@ -27,6 +27,8 @@ function getCalendarEventsOfRoutines(
       .set("minute", end.split(":")[1])
       .toDate();
     calendarEvents.push({
+      isUserRoutine: false,
+      id,
       title,
       start: startDate,
       end: endDate,
@@ -34,7 +36,7 @@ function getCalendarEventsOfRoutines(
       backgroundColor: getColorByTitle(title),
     });
   });
-  rawUserRoutines.forEach(({ title, start, end, description, done }) => {
+  rawUserRoutines.forEach(({ title, start, end, description, done, id }) => {
     const startDate = dayjs()
       .set("hour", start.split(":")[0])
       .set("minute", start.split(":")[1])
@@ -44,6 +46,8 @@ function getCalendarEventsOfRoutines(
       .set("minute", end.split(":")[1])
       .toDate();
     calendarEvents.push({
+      isUserRoutine: true,
+      id,
       title,
       start: startDate,
       end: endDate,

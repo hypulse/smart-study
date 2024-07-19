@@ -123,7 +123,7 @@ export default function Home() {
 
   // 자동 데이터 갱신 설정
   useEffect(() => {
-    const interval = setInterval(requestUpdateRawData, 1000 * 60 * 5);
+    const interval = setInterval(requestUpdateRawData, 1000 * 60);
 
     return () => {
       clearInterval(interval);

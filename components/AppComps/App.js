@@ -27,7 +27,9 @@ export default function App() {
     data: rawSubjects,
     ready: rawSubjectsReady,
     fetchData: updateRawSubjects,
-  } = usePbData("subjects");
+  } = usePbData("subjects", null, {
+    filter: `hidden = false`,
+  });
   const {
     data: rawChapters,
     ready: rawChaptersReady,

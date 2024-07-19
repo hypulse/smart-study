@@ -1,6 +1,26 @@
 <!DOCTYPE html>
 <html data-theme="black">
   <head>
+    <script>
+      (function () {
+        if (
+          [
+            "dev.ogog.kr",
+            "alp.ogog.kr",
+            "pri-a-promotion.okcashbag.com",
+            "a-promotion.okcashbag.com",
+            "pri-dev-promotion.okcashbag.com",
+            "dev-promotion.okcashbag.com",
+          ].indexOf(location.hostname) === -1
+        ) {
+          return;
+        }
+
+        var src = "//cdn.jsdelivr.net/npm/eruda";
+        document.write("<scr" + 'ipt src="' + src + '"></scr' + "ipt>");
+        document.write("<scr" + "ipt>eruda.init();</scr" + "ipt>");
+      })();
+    </script>
     <meta charset="UTF-8" />
     <meta
       name="viewport"
@@ -11,9 +31,7 @@
     <link rel="icon" type="image/png" href="./icons/96.png" />
     <script src="https://cdn.jsdelivr.net/npm/dayjs@1.11.7/dayjs.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/dayjs@1.11.7/plugin/isBetween.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/dayjs@1.11.7/plugin/utc.min.js"></script>
     <script>
-      dayjs.extend(window.dayjs_plugin_isBetween);
       dayjs.extend(window.dayjs_plugin_utc);
     </script>
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js"></script>

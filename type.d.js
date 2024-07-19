@@ -68,6 +68,8 @@
  * end: Date
  * allDay: boolean
  * backgroundColor: string
+ * id?: string
+ * isUserRoutine?: boolean
  * }} CalendarEvent
  */
 
