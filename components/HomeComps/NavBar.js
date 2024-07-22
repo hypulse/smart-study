@@ -7,11 +7,11 @@ export default function NavBar() {
   const { pages, applyWidgets } = useHomeContext();
 
   return html`
-    <div className="flex gap-4 items-center fixed h-12">
+    <div className="flex gap-4 items-center fixed h-8">
       ${pages.map(
         (p) => html`
           <a
-            className="text-4xl link link-hover"
+            className="text-2xl link link-hover"
             onClick=${() => applyWidgets(p.widgets)}
           >
             ${p.title}
@@ -20,7 +20,7 @@ export default function NavBar() {
       )}
       <div className="flex gap-2">
         <button
-          className="btn btn-primary btn-square"
+          className="btn btn-primary btn-square btn-sm"
           onClick=${() => {
             requestUpdateRawData();
           }}
@@ -39,7 +39,7 @@ export default function NavBar() {
           </svg>
         </button>
         <button
-          className="btn btn-primary btn-square"
+          className="btn btn-primary btn-square btn-sm"
           onClick=${() => {
             window.location.reload();
           }}
@@ -60,6 +60,6 @@ export default function NavBar() {
       </div>
       <${Clock} />
     </div>
-    <div className="h-12" />
+    <div className="h-8" />
   `;
 }

@@ -13,5 +13,5 @@ export default function Clock() {
     return () => clearInterval(interval);
   });
 
-  return html`<div ref=${timerRef} className="text-4xl"></div>`;
+  return html`<div ref=${timerRef} className="text-2xl"></div>`;
 }

@@ -5,7 +5,7 @@ export default function Menu() {
   const { widgets } = useHomeContext();
 
   return html`
-    <div className="grid grid-cols-2 gap-2">
+    <div className="grid grid-cols-4 gap-2">
       ${widgets.map((widget) => html`<${MenuWidgetBox} widget=${widget} />`)}
     </div>
   `;
@@ -20,7 +20,7 @@ function MenuWidgetBox({ widget }) {
   }
 
   return html`
-    <div className="grid gap-2">
+    <div className="flex">
       <button className="btn btn-primary btn-square btn-sm" onClick=${openComp}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -35,7 +35,7 @@ function MenuWidgetBox({ widget }) {
           />
         </svg>
       </button>
-      <h3 className="text-4xl">${title}</h3>
+      <h3 className="text-2xl">${title}</h3>
     </div>
   `;
 }

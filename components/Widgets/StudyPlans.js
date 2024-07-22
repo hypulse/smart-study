@@ -77,7 +77,7 @@ function ChapterBox(
 
   return html`
     <details className="collapse bg-base-200">
-      <summary className="collapse-title text-xl font-medium">
+      <summary className="text-xl p-2 font-medium">
         <p className="flex items-center gap-2">
           <span>
             ${title}${" "}
@@ -159,7 +159,7 @@ function ToDoBox(
               />
             `}
       </h3>
-      <p className="text-sm">${how}</p>
+      <p className="text-xs">${how}</p>
       <p>
         <span>${done ? "학습 완료" : "학습 예정"}: </span>
         <span>${dateDisplay}</span>
