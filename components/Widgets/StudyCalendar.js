@@ -17,7 +17,7 @@ export default function StudyCalendar() {
       events: calendarStudyEvents,
       editable: false,
       headerToolbar: {
-        center: "dayGridMonth",
+        center: "",
       },
       eventClick: function (data) {
         showModal(data.event.extendedProps.description, data.event.title);

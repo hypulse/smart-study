@@ -17,7 +17,7 @@ export default function EventCalendar() {
       events: calendarEvents,
       editable: false,
       headerToolbar: {
-        center: "dayGridMonth",
+        center: "",
       },
       eventClick: function (data) {
         showModal(data.event.extendedProps.description, data.event.title);
