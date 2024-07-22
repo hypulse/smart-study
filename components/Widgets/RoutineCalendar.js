@@ -2,6 +2,7 @@ import { ROUTINE_DATE } from "../../env.js";
 import { useAppContext } from "../../hooks/useAppContext.js";
 import { html, useEffect, useRef } from "../../libs/preact.js";
 import showModal from "../../utils/showModal.js";
+import speak from "../../utils/speak.js";
 
 export default function RoutineCalendar() {
   const ref = useRef();
@@ -93,6 +94,10 @@ export default function RoutineCalendar() {
 
   useEffect(() => {
     const speakRoutine = () => {
+      if (ROUTINE_DATE !== dayjs().format("YYYY-MM-DD")) {
+        return;
+      }
+
       const routineAlertedListDate = localStorage.getItem(
         "routineAlertedList-date"
       );

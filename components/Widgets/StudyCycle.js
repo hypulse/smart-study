@@ -26,7 +26,6 @@ export default function StudyCycle() {
       { ...studyCycle[lastStep], done: true },
       ...studyCycle.slice(lastStep + 1),
     ];
-    console.table(newStudyCycle);
     await pb.collection(`${DB_PREFIX}_configs`).update(CONFIG_RECORD_ID, {
       studyCycle: {
         ...rawConfig.studyCycle,

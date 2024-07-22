@@ -123,7 +123,19 @@ export default function Home() {
 
   // 자동 데이터 갱신 설정
   useEffect(() => {
-    const interval = setInterval(requestUpdateRawData, 1000 * 60);
+    const interval = setInterval(() => {
+      const realdate = localStorage.getItem("realdate");
+      if (!realdate) {
+        localStorage.setItem("realdate", dayjs().format("YYYY-MM-DD"));
+      } else if (realdate !== dayjs().format("YYYY-MM-DD")) {
+        localStorage.setItem("realdate", dayjs().format("YYYY-MM-DD"));
+        const params = new URLSearchParams(window.location.search);
+        params.set("routine_date", `${dayjs().format("YYYY-MM-DD")}`);
+        window.location.search = params.toString();
+        return;
+      }
+      requestUpdateRawData();
+    }, 1000 * 60);
 
     return () => {
       clearInterval(interval);

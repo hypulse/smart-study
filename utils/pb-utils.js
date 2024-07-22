@@ -45,6 +45,7 @@ const syncAuth = async () => {
       await window.globalPb.collection("users").authRefresh();
     }
   } catch (_) {
+    console.log("Failed to sync auth!");
     window.globalPb.authStore.clear();
   }
 };
