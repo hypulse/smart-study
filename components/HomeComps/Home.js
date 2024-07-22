@@ -118,7 +118,8 @@ export default function Home() {
 
   // 초기 레이아웃 설정
   useEffect(() => {
-    applyWidgets(pages[0].widgets);
+    const currentPage = localStorage.getItem("currentPage") || 0;
+    applyWidgets(pages[Number(currentPage)].widgets);
   }, []);
 
   // 자동 데이터 갱신 설정

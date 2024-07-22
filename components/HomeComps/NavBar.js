@@ -9,10 +9,13 @@ export default function NavBar() {
   return html`
     <div className="flex gap-4 items-center fixed h-8">
       ${pages.map(
-        (p) => html`
+        (page, index) => html`
           <a
             className="text-2xl link link-hover"
-            onClick=${() => applyWidgets(p.widgets)}
+            onClick=${() => {
+              localStorage.setItem("currentPage", index);
+              applyWidgets(page.widgets);
+            }}
           >
             ${p.title}
           </a>
