@@ -21,7 +21,8 @@ export default function RoutineCalendar() {
       events: calendarRoutineEvents,
       editable: false,
       headerToolbar: {
-        center: "timeGridDay",
+        left: "",
+        center: "",
       },
       validRange: {
         start: dayjs().startOf("day").toDate(),

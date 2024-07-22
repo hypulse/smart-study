@@ -102,7 +102,7 @@ function RoutinesToDoCard(
   }, []);
 
   return html`
-    <div className="grid gap-2 bg-neutral text-neutral-content relative p-4">
+    <div className="grid gap-2 bg-neutral text-neutral-content relative p-2">
       <button className="absolute top-0 right-0" onClick=${handleDelete}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -120,7 +120,7 @@ function RoutinesToDoCard(
       <h2 className="text-lg">${title} (<span ref=${ref}></span>)</h2>
       <p>${startDisplay} - ${endDisplay}</p>
       <div className="card-actions justify-end">
-        <button className="btn btn-outline" onClick=${handleComplete}>
+        <button className="btn btn-outline btn-sm" onClick=${handleComplete}>
           완료
         </button>
       </div>
