@@ -17,7 +17,7 @@ export default function NavBar() {
               applyWidgets(page.widgets);
             }}
           >
-            ${p.title}
+            ${page.title}
           </a>
         `
       )}
