@@ -135,8 +135,7 @@ export default function Home() {
         window.location.search = params.toString();
         return;
       }
-      requestUpdateRawData();
-    }, 1000 * 60);
+    }, 1000);
 
     return () => {
       clearInterval(interval);
