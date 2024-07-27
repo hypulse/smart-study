@@ -89,11 +89,11 @@ export default function Home() {
     },
     {
       title: "Study",
-      widgets: ["StudyCalendar", "StudyPlans"],
+      widgets: ["StudyCycle", "StudyCalendar", "StudyPlans"],
     },
     {
       title: "Menu",
-      widgets: ["EventCalendar", "StudyCycle", "Note", "Menu"],
+      widgets: ["EventCalendar", "Note", "Menu"],
     },
   ];
   const activeWidgets = widgets.filter((widget) => !widget.hidden);
