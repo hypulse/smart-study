@@ -140,24 +140,13 @@ function ToDoBox(
       <h3 className="text-lg flex items-center gap-2">
         ${badgeToDisplay}
         <span>Day ${accDayAfter}: ${what}</span>
-        ${done
-          ? html`
-              <input
-                type="checkbox"
-                className="checkbox checkbox-success"
-                defaultChecked
-                onClick=${(e) => {
-                  e.preventDefault();
-                }}
-              />
-            `
-          : html`
-              <input
-                type="checkbox"
-                className="checkbox checkbox-success"
-                onClick=${handleDone}
-              />
-            `}
+        <input
+          type="checkbox"
+          className="checkbox checkbox-success"
+          defaultChecked=${done}
+          checked=${done}
+          onClick=${handleDone}
+        />
       </h3>
       <p className="text-xs">${how}</p>
       <p>
