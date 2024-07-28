@@ -59,19 +59,20 @@ function ChapterBox(
     ? html`<${LateBadge} />`
     : null;
 
-  const handleDone = (index) => async (e) => {
-    const answer = confirm("Are you sure you want to mark this as done?");
+  const handleDone = (index) => async (done) => {
+    const answer = confirm(
+      `Are you sure you want to mark this as ${done ? "done" : "undone"}?`
+    );
     if (!answer) {
-      e.preventDefault();
       return;
     }
     const newToDos = [...toDos];
-    newToDos[index].done = true;
+    newToDos[index].done = done;
     newToDos[index].doneDate = dayjs(ROUTINE_DATE).format("YYYY-MM-DD");
     await pb.collection(`${DB_PREFIX}_chapters`).update(id, {
       toDos: newToDos,
     });
-    alert("Marked as done!");
+    alert(`Marked as ${done ? "done" : "undone"}!`);
     requestUpdateRawData();
   };
 
@@ -145,7 +146,9 @@ function ToDoBox(
           className="checkbox checkbox-success"
           defaultChecked=${done}
           checked=${done}
-          onClick=${handleDone}
+          onClick=${() => {
+            handleDone(!done);
+          }}
         />
       </h3>
       <p className="text-xs">${how}</p>
