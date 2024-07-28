@@ -1,4 +1,4 @@
-import { DB_PREFIX } from "../../env.js";
+import { DB_PREFIX, ROUTINE_DATE } from "../../env.js";
 import { useAppContext } from "../../hooks/useAppContext.js";
 import usePb from "../../hooks/usePb.js";
 import { html, useState } from "../../libs/preact.js";
@@ -67,7 +67,7 @@ function ChapterBox(
     }
     const newToDos = [...toDos];
     newToDos[index].done = true;
-    newToDos[index].doneDate = dayjs().format("YYYY-MM-DD");
+    newToDos[index].doneDate = dayjs(ROUTINE_DATE).format("YYYY-MM-DD");
     await pb.collection(`${DB_PREFIX}_chapters`).update(id, {
       toDos: newToDos,
     });
